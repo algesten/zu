@@ -1,0 +1,17 @@
+{
+  "name": "zu",
+  "version": "0.0.0",
+  "main": "index.js",
+  "description": "Minimal DOM parser + query selector",
+  "repository": {
+    "type": "git",
+    "url": "github.com/algesten/zu"
+  },
+  "author": "Martin Algesten",
+  "license": "MIT",
+  "dependencies": {
+    "domutils": "^1.5.1",
+    "fnuc": "0.0.19",
+    "htmlparser2": "^3.8.3"
+  }
+}
