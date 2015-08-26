@@ -28,6 +28,7 @@ word   = execpos(RegExp "[^#{ws}#{escre keys(SYMBOLS).join('')}]+", "g")
 symbol = (s, pos) -> if r = SYMBOLS[s[pos]] then r else null
 
 lexer = (s) ->
+
     tok = (start, skipsp) ->
         if start == s.length
             null
@@ -39,5 +40,26 @@ lexer = (s) ->
             {type, start, len:1}
         else
             throw new Error("Unknown input pos: #{start}")
+
+    # current lexer position
+    pos = 0
+
+    # peek at next token
+    peek = (skipsp) -> tok pos, skipsp
+
+    # consume next token (move position forward)
+    consume = (skipsp) ->
+        token = tok pos, skipsp
+        pos = token.start + token.len if token
+        token
+
+    # expect token of given type and consume it
+    expect = (type, skipsp) ->
+        token = consume skipsp
+        if token?.type != type
+            throw new Error "Expected '#{type}' at col #{pos}: #{s[pos..(pos + 10)]}"
+        token
+
+    {peek, consume, expect, pos:->pos}
 
 module.exports = lexer

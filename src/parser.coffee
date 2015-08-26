@@ -1,4 +1,4 @@
-{split, mixin} = require 'fnuc'
+{split, mixin, merge} = require 'fnuc'
 lexer = require './lexer'
 spc = split ' '
 
@@ -30,29 +30,11 @@ INFIX =
 
 parser = (s) ->
 
-    # current parse position
-    pos = 0
-
-    # function returning token at position
-    # token(pos, skipsp)
+    # lexer functions
     lex = lexer(s)
+    {peek, consume, expect, pos} = lex
 
-    # peek at next token
-    peek = (skipsp) -> lex pos, skipsp
-
-    # consume next token and return it
-    consume = (skipsp) ->
-        token = lex pos, skipsp
-        pos = token.start + token.len if token
-        token
-
-    # expect token of given type and consume it
-    expect = (type) ->
-        token = consume(false)
-        if token?.type != type
-            throw new Error "Expected '#{type}' at col #{pos}: #{s[pos..(pos + 10)]}"
-        token
-
+    # infix operator parsing
     parseInfix = (pr, left, skipsp) ->
 
         # peek at next token
@@ -97,14 +79,10 @@ parser = (s) ->
         parseInfix pr, left, true
 
 
-    # expose consume/peek/expect
-    parse.consume = consume
-    parse.peek    = peek
-    parse.expect  = expect
+    # expose lexer functions
+    merge parse, lex
 
     parse
-
-
 
 
 module.exports = parser
