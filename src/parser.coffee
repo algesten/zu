@@ -70,7 +70,7 @@ parser = (s) ->
 
         # next prefix
         unless prx = PREFIX[token.type]
-            throw new Error "Parse failed at col #{token.start}: #{s[pos..(pos + 10)]}"
+            throw new Error "Parse failed at col #{pos()}: #{s}"
 
         # left expression
         left = prx parse, token

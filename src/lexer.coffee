@@ -57,7 +57,7 @@ lexer = (s) ->
     expect = (type, skipsp) ->
         token = consume skipsp
         if token?.type != type
-            throw new Error "Expected '#{type}' at col #{pos}: #{s[pos..(pos + 10)]}"
+            throw new Error "Expected '#{type}' at col #{pos}: #{s}"
         token
 
     {peek, consume, expect, pos:->pos}
