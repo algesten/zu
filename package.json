@@ -10,8 +10,12 @@
   "author": "Martin Algesten",
   "license": "MIT",
   "dependencies": {
-    "domutils": "^1.5.1",
     "fnuc": "0.0.19",
     "htmlparser2": "^3.8.3"
+  },
+  "devDependencies": {
+    "chai": "^3.2.0",
+    "coffee-script": "^1.9.3",
+    "mocha": "^2.2.5"
   }
 }

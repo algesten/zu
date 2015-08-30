@@ -1,6 +1,4 @@
-{keys, typeis} = require 'fnuc'
-
-isnum = typeis 'number'
+{keys} = require 'fnuc'
 
 SYMBOLS =
     '.': 'dot'

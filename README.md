@@ -1,5 +1,4 @@
 zu
 ==
 
-Minimal DOM manipulation
-
+Minimal DOM grokking with CSS style selectors
