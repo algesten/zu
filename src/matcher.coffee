@@ -1,8 +1,8 @@
 
-walk = (nodes, down, fn) ->
+walk = (nodes, fn) ->
     for n in nodes
         fn n
-        walk n.children, down, fn if down and n.children
+        walk n.children, fn if n.children
     null
 
 # XXX possible to optimize to avoid compiling new regexp
@@ -92,16 +92,16 @@ matchupast = (parents, ast) ->
 
 upparent = (nodes) -> nodes[i] = n?.parent for n, i in nodes
 
-module.exports = (nodes, ast, down=true) ->
+module.exports = (nodes, ast) ->
 
     startnodes = []
-    if ast.deep and down
+    if ast.deep
         # recursively match nodes that are potential
         # starting points.
-        walk nodes, down, match(ast.right, startnodes)
+        walk nodes, match(ast.right, startnodes)
     else
         # one level?
-        walk nodes, down, match(ast, startnodes)
+        walk nodes, match(ast, startnodes)
         return startnodes
 
     # parents array will be modified to hold nodes that are kept.
