@@ -18,7 +18,7 @@ dedup = sequence uniq, defined
 propify = (k, v) -> value:v
 fn = omap(propify)
     __zu: true
-    find: (e) -> matcher this, parser(e)()
-    parent: -> dedup map this, (n) -> n.parent
+    find: (e) -> wrap matcher this, parser(e)()
+    parent: -> wrap dedup map this, (n) -> n.parent
 
 module.exports = zu

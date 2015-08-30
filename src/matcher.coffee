@@ -1,16 +1,9 @@
-{arrclone} = require './arr'
 
 walk = (nodes, down, fn) ->
-    q = arrclone nodes
-    while q.length
-        cn = q.shift()
-        fn cn
-        if down and cn.children
-            len = q.length
-            q[len + i] = cn.children[i] for i in [0...cn.children.length] by 1
-
-astdesc  = (ast) -> if ast?.deep then ast.type == 'descend' or astdesc(ast.left) else false
-astdepth = (ast) -> if ast?.deep then 1 + astdepth ast.left else 0
+    for n in nodes
+        fn n
+        walk n.children, down, fn if down and n.children
+    null
 
 # XXX possible to optimize to avoid compiling new regexp
 hasclass = (n, clz) -> !!n.attribs?.class.match RegExp "(^| )#{clz}($| )"
@@ -28,25 +21,15 @@ evl = (n, ast) ->
 
 match = (ast, coll) -> (n) -> coll.push n if evl(n, ast)
 
-# write the (relative) node depth at each node in the tree
-markdepth = (nodes, d=0) ->
-    return unless nodes
-    for n in nodes
-        n._depth = d
-        markdepth n.children, d+1
-    null
-
-# recurse down and collect nodes at certain depth
-atdepth = (nodes, depth, coll=[]) ->
-    return coll unless nodes
-    for n in nodes
-        coll.push n if n._depth == depth
-        atdepth n.children, depth, coll
-    coll
+depthof = (n) ->
+    if n
+        if n._depth then n._depth else n._depth = 1 + depthof(n.parent)
+    else
+        0
 
 # max depth of the list of nodes or 0
 maxdepth = (nodes) -> nodes.reduce (d, n) ->
-    Math.max d, (n?._depth ? 0)
+    Math.max d, depthof(n)
 , 0
 
 #         div
@@ -55,7 +38,7 @@ maxdepth = (nodes) -> nodes.reduce (d, n) ->
 #            /   \
 #           i    span.d
 
-matchupdomlvl = (nodes, ast, depth) -> for n, i in nodes when depth < 0 or depth == n?._depth
+matchupdomlvl = (nodes, ast, depth) -> for n, i in nodes when depth < 0 or depth == depthof(n)
     continue unless n
     # run match if not already done
     n._match = evl n, ast unless typeof n._match == 'boolean'
@@ -113,9 +96,9 @@ module.exports = (nodes, ast, down=true) ->
 
     startnodes = []
     if ast.deep and down
-        markdepth nodes # mark depth in tree
-        # start from astdepth level and down
-        walk (atdepth nodes, astdepth(ast)), true, match(ast.right, startnodes)
+        # recursively match nodes that are potential
+        # starting points.
+        walk nodes, down, match(ast.right, startnodes)
     else
         # one level?
         walk nodes, down, match(ast, startnodes)
@@ -125,20 +108,8 @@ module.exports = (nodes, ast, down=true) ->
     parents = startnodes.map (n) -> n.parent
     matchupast parents, ast
 
-    # XXX
-    # keep startnodes for parents
+    # keep startnodes for parents that passed matching
     startnodes.reduce (coll, n, i) ->
         coll.push n if parents[i]
         coll
     , []
-
-
-# { type: 'tag',
-#     name: 'span',
-#     attribs: { class: 'd' },
-#     children: [],
-#     next: ...
-#     prev: ...
-#     parent: ...
-#     toString: [Function],
-#     _depth: 2 }
