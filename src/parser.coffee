@@ -6,9 +6,9 @@ prec   = (pr) -> (fn) -> fn.pr = pr; fn
 precof = (fn) -> fn?.pr ? 0
 
 tagexp = (type, pr, npr) -> prec(pr) (parse, token) ->
-    ntoken = parse.peek(false)
-    prx = PREFIX[ntoken?.type]
-    right = (parse.consume(false); prx parse, ntoken) if npr < precof(prx)
+    ntoken = parse.peek()
+    prx = PREFIX2[ntoken?.type]
+    right = (parse.consume(); prx parse, ntoken) if npr < precof(prx)
     mixin {type, token, right}
 
 sel_id     = tagexp 'id',     2, 2
@@ -16,11 +16,48 @@ sel_class  = tagexp 'class',  2, 2
 sel_pseudo = tagexp 'pseudo', 2, 2
 sel_word   = tagexp 'word',   3, 1
 
+# get a quoted or unquoted string
+string = (parse) ->
+    token = parse.peek()
+    if token.type == 'quote'
+        parse.consume()
+        word = parse.expect(/((?!")[^\\]|\\.)*/g) # anything but quote
+        throw new Error "Expected quoted string #{parse.pos()}: #{parse.s}" unless word
+        end = parse.expect('quote')
+        word
+    else if token.type == 'word'
+        parse.consume()
+        token
+    else
+        throw new Error "Expected quote or word #{parse.pos()}: #{parse.s}"
+
+sel_attrib = prec(3) (parse, token) ->
+    attr = string(parse).word
+    token = parse.peek()
+    attrtype = ATTR_TYPES[token.type]? parse
+    throw new Error "Parse failed at col #{parse.pos()}: #{parse.s}" unless attrtype
+    attrval = if attrtype == 'exists' then null else string(parse).word
+    parse.expect('clbrack')
+    {type:'attrib', token, attrtype, attr, attrval}
+
+ATTR_TYPES = do ->
+    symb2 = (type) -> (parse) -> parse.consume(); parse.expect('equals'); type
+    clbrack:  (parse) -> 'exists'
+    equals:   (parse) -> parse.consume(); 'equals'
+    tilde:    symb2 'white'
+    pipe:     symb2 'hyphen'
+    caret:    symb2 'begin'
+    dollar:   symb2 'end'
+    asterisk: symb2 'substr'
+
 PREFIX =
     hash:  sel_id
     dot:   sel_class
     colon: sel_pseudo
     word:  sel_word
+
+PREFIX2 = mixin PREFIX,
+    opbrack: sel_attrib
 
 infixop  = (type, pr) -> prec(pr) (parse, token, left) ->
     {type, token, left, right:parse(pr), deep:true}
@@ -89,7 +126,7 @@ parser = (s) ->
 
 
     # expose lexer functions
-    merge parse, lex
+    merge parse, lex, {s}
 
     parse
 

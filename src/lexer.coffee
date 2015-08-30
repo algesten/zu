@@ -10,11 +10,18 @@ SYMBOLS =
     ']': 'clbrack'
     '(': 'opparen'
     ')': 'clparen'
+    '=': 'equals'
+    '~': 'tilde'
+    '|': 'pipe'
+    '^': 'caret'
+    '$': 'dollar'
+    '*': 'asterisk'
+    '"': 'quote'
 
 # whitespace is sp
 ws = " "
 
-escre = (s) -> s.replace(/\[/g,'\\[').replace(/\]/g,'\\]')
+escre = require './escre'
 
 execpos = (re) -> (s, pos) ->
     re.lastIndex = pos
@@ -53,9 +60,16 @@ lexer = (s) ->
 
     # expect token of given type and consume it
     expect = (type, skipsp) ->
-        token = consume skipsp
-        if token?.type != type
-            throw new Error "Expected '#{type}' at col #{pos}: #{s}"
+        if type instanceof RegExp
+            start = pos
+            len = execpos(type)(s, start)
+            if len != undefined
+                pos = start + len
+                token = {token:'re', start:pos, len, word:s[start...(start+len)]}
+        else
+            token = consume skipsp
+            if token?.type != type
+                throw new Error "Expected '#{type}' at col #{pos}: #{s}"
         token
 
     {peek, consume, expect, pos:->pos}

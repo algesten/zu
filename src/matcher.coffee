@@ -1,3 +1,4 @@
+escre = require './escre'
 
 walk = (nodes, fn) ->
     for n in nodes
@@ -9,6 +10,26 @@ walk = (nodes, fn) ->
 hasclass = (n, clz) -> !!n.attribs?.class.match RegExp "(^| )#{clz}($| )"
 isId = (n, id) -> n.attribs?.id == id
 
+# evaluate attribute selector
+evlattr = (n, ast) ->
+    nv = n?.attribs[ast.attr]
+    if ast.attrtype == 'exists'
+        !!nv
+    else if ast.attrtype == 'equals'
+        nv == ast.attrval
+    else if ast.attrtype == 'white'
+        !!nv?.match RegExp "(^| )#{escre ast.attrval}($| )"
+    else if ast.attrtype == 'hyphen'
+        !!nv?.match RegExp "^#{escre ast.attrval}($|-)"
+    else if ast.attrtype == 'begin'
+        nv?.indexOf(ast.attrval) == 0
+    else if ast.attrtype == 'end'
+        !!nv?.match RegExp "#{escre ast.attrval}$"
+    else if ast.attrtype == 'substr'
+        nv?.indexOf(ast.attrval) >= 0
+    else
+        false
+
 evl = (n, ast) ->
     if !ast
         return true
@@ -18,6 +39,8 @@ evl = (n, ast) ->
         unless isId(n, ast.right.token.word) then false else true and evl(n, ast.right.right)
     else if ast.type == 'class'
         unless hasclass(n, ast.right.token.word) then false else true and evl(n, ast.right.right)
+    else if ast.type == 'attrib'
+        unless evlattr(n, ast) then false else true and evl(ast.right)
 
 match = (ast, coll) -> (n) -> coll.push n if evl(n, ast)
 
