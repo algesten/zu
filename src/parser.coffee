@@ -5,8 +5,6 @@ spc = split ' '
 prec   = (pr) -> (fn) -> fn.pr = pr; fn
 precof = (fn) -> fn?.pr ? 0
 
-infixop  = (type, pr) -> prec(pr) (parse, token, left) -> {type, token, left, right:parse(pr)}
-
 tagexp = (type, pr, npr) -> prec(pr) (parse, token) ->
     ntoken = parse.peek(false)
     prx = PREFIX[ntoken?.type]
@@ -23,6 +21,9 @@ PREFIX =
     dot:   sel_class
     colon: sel_pseudo
     word:  sel_word
+
+infixop  = (type, pr) -> prec(pr) (parse, token, left) ->
+    {type, token, left, right:parse(pr), deep:true}
 
 INFIX =
     gt:    infixop 'child',   4

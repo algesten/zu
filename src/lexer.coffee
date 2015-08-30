@@ -35,7 +35,7 @@ lexer = (s) ->
         else if len = space s, start
             if skipsp then tok(start + len) else {type:'space', start, len}
         else if len = word s, start
-            {type:'word', start, len}
+            {type:'word', start, len, word:s[start...(start+len)]}
         else if type = symbol s, start
             {type, start, len:1}
         else
