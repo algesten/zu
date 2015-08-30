@@ -7,6 +7,11 @@
     "type": "git",
     "url": "github.com/algesten/zu"
   },
+  "scripts": {
+    "test": "mocha",
+    "prepublish": "coffee -m -c -o lib src"
+  },
+  "main": "lib/zu.js",
   "author": "Martin Algesten",
   "license": "MIT",
   "dependencies": {
