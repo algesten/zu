@@ -97,7 +97,8 @@ matchupast = (roots, parents, ast) ->
             upparent parents # move parents up
             matchupast roots, parents, ast.left
     else
-        # only keep those parents that are one of the roots
+        # only keep those parents that are one of the roots.
+        # this is for immediate child expressions "> div"
         for n, i in parents
             parents[i] = null unless roots.indexOf(n) >= 0
     null
