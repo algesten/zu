@@ -72,21 +72,34 @@ matchupdom = (nodes, ast, immediate) ->
             break if depth-- == 0
     null
 
+# div > span.c span.d
+#
 #      desc
 #     /    \
-#   desc    span.d
+#   child   span.d
 #  /    \
 # div  span.c
 
-matchupast = (parents, ast) ->
+# > span.d
+#
+#      child
+#     /    \
+#   null    span.d
+
+matchupast = (roots, parents, ast) ->
     ischild = ast.type == 'child'
-    parentast = if ast.left.deep then ast.left.right else ast.left
-    # check dom nodes for this ast level
-    matchupdom parents, parentast, ischild
-    # continue up? the ast (if there is a continuation)
-    if ast.left.deep
-        upparent parents # move parents up
-        matchupast parents, ast.left
+    if ast.left
+        parentast = if ast.left.deep then ast.left.right else ast.left
+        # check dom nodes for this ast level
+        matchupdom parents, parentast, ischild
+        # continue up? the ast (if there is a continuation)
+        if ast.left.deep
+            upparent parents # move parents up
+            matchupast roots, parents, ast.left
+    else
+        # only keep those parents that are one of the roots
+        for n, i in parents
+            parents[i] = null unless roots.indexOf(n) >= 0
     null
 
 
@@ -106,7 +119,7 @@ module.exports = (nodes, ast) ->
 
     # parents array will be modified to hold nodes that are kept.
     parents = startnodes.map (n) -> n.parent
-    matchupast parents, ast
+    matchupast nodes, parents, ast
 
     # keep startnodes for parents that passed matching
     startnodes.reduce (coll, n, i) ->

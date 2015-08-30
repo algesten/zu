@@ -64,17 +64,25 @@ parser = (s) ->
     parse = (pr = 0) ->
 
         # next token
-        token = consume(true)
+        token = peek(true)
 
         # no more tokens?
         return null unless token
 
         # next prefix
-        unless prx = PREFIX[token.type]
+        if prx = PREFIX[token.type]
+            # consume prefix
+            consume(true)
+        else if token.type == 'gt'
+            # special case with leading '>'. reset token to not parse
+            # left expression, however token should be parsed as infix
+            # with empty left.
+            token = null
+        else
             throw new Error "Parse failed at col #{pos()}: #{s}"
 
         # left expression
-        left = prx parse, token
+        left = prx parse, token if token
 
         # may return infix expression or left
         parseInfix pr, left, true

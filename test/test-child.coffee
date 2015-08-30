@@ -48,3 +48,14 @@ describe 'child', ->
 
         it 'selects at different depths', ->
             eql z.find('div > span'), ['<span.c>', '<span.g>']
+
+    describe 'immediate', ->
+
+        it 'selects none', ->
+            eql z.find('> p'), []
+
+        it 'selects immediate descendant of root', ->
+            eql z.find('> span'), ['<span.c>']
+
+        it 'selects further descendant of root', ->
+            eql z.find('> span.c i'), ['<i>']
