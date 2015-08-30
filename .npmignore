@@ -20,6 +20,4 @@ public
 bower_components
 doc
 
-BrowserStackLocal
-
-lib
+test
