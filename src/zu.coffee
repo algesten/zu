@@ -23,9 +23,17 @@ dedup = sequence uniq, defined
 propify = (k, v) -> value:v
 fn = omap(propify)
     isZu: true
-    find: (e) -> wrap matcher this, parser(e)()
-    parent: -> wrap dedup map this, (n) -> n.parent
     xml:  -> domparser.renderXml  this
     html: -> domparser.renderHtml this
+    find:     (sel) -> wrap matcher this, parser(sel)()
+    parent:   (sel) -> wrap dedup map this, (n) -> n.parent
+    closest:  (sel) ->
+    next:     (sel) ->
+    prev:     (sel) ->
+    siblings: (sel) ->
+    children: (sel) ->
+    attr:     (name) ->
+    data:     (name) ->
+    hasClass: (name) ->
 
 module.exports = zu
