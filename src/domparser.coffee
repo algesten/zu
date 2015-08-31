@@ -1,5 +1,6 @@
 {merge, replace} = require 'fnuc'
 htmlparser = require 'htmlparser2'
+serialize  = require 'dom-serializer'
 
 idstr = (n) -> if s = n.attribs.id then "##{s}" else ""
 dots = replace (/ /g), '.'
@@ -30,3 +31,5 @@ doparse = (s, opts) ->
 module.exports =
     xml:  (s) -> doparse s, {xmlMode:true}
     html: (s) -> doparse s
+    renderXml:  (dom) -> serialize dom, xmlMode:true
+    renderHtml: (dom) -> serialize dom

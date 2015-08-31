@@ -25,5 +25,7 @@ fn = omap(propify)
     isZu: true
     find: (e) -> wrap matcher this, parser(e)()
     parent: -> wrap dedup map this, (n) -> n.parent
+    xml:  -> domparser.renderXml  this
+    html: -> domparser.renderHtml this
 
 module.exports = zu

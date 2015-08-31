@@ -1,7 +1,7 @@
 {
   "name": "zu",
   "version": "0.0.0",
-  "main": "index.js",
+  "main": "lib/zu.js",
   "description": "Minimal DOM parser + query selector",
   "repository": {
     "type": "git",
@@ -11,10 +11,10 @@
     "test": "mocha",
     "prepublish": "coffee -m -c -o lib src"
   },
-  "main": "lib/zu.js",
   "author": "Martin Algesten",
   "license": "MIT",
   "dependencies": {
+    "dom-serializer": "^0.1.0",
     "fnuc": "0.0.19",
     "htmlparser2": "^3.8.3"
   },
