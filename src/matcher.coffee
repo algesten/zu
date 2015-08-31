@@ -121,6 +121,9 @@ matchupast = (roots, parents, ast) ->
 
 upparent = (nodes) -> nodes[i] = n?.parent for n, i in nodes
 
+# the matcher expects to be given nodes that are already selected
+# against the lowest level (right most) level in the ast. it
+# will only check parent nodes working up the ast tree.
 module.exports = matcher = (roots, nodes, ast) ->
 
     # no expression? just return start nodes

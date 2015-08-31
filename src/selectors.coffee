@@ -3,8 +3,12 @@ matcher = require './matcher'
 parser  = require './parser'
 {evl}   = matcher
 
+# when collecting nodes we do tests against the lowest
+# level in a selector expressions. this forms a starting
+# point for executing the entire ast using the matcher.
 collector = (ast) ->
     nodes = []
+    # ast.deep means a child/descend expression
     lst = if ast?.deep then ast.right else ast
     coll = (n) -> nodes.push n if evl(n, lst)
     {nodes, coll}
