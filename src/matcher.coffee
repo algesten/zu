@@ -1,11 +1,5 @@
 escre = require './escre'
 
-walk = (nodes, fn) ->
-    for n in nodes
-        fn n
-        walk n.children, fn if n.children
-    null
-
 # XXX possible to optimize to avoid compiling new regexp
 hasclass = (n, clz) -> !!n.attribs?.class.match RegExp "(^| )#{clz}($| )"
 isId = (n, id) -> n.attribs?.id == id
@@ -41,8 +35,6 @@ evl = (n, ast) ->
         unless hasclass(n, ast.right.token.word) then false else true and evl(n, ast.right.right)
     else if ast.type == 'attrib'
         unless evlattr(n, ast) then false else true and evl(ast.right)
-
-match = (ast, coll) -> (n) -> coll.push n if evl(n, ast)
 
 depthof = (n) ->
     if n
@@ -129,24 +121,20 @@ matchupast = (roots, parents, ast) ->
 
 upparent = (nodes) -> nodes[i] = n?.parent for n, i in nodes
 
-module.exports = (nodes, ast) ->
+module.exports = matcher = (roots, nodes, ast) ->
 
-    startnodes = []
-    if ast.deep
-        # recursively match nodes that are potential
-        # starting points.
-        walk nodes, match(ast.right, startnodes)
-    else
-        # one level?
-        walk nodes, match(ast, startnodes)
-        return startnodes
+    # no expression? just return start nodes
+    return nodes unless ast?.deep
 
     # parents array will be modified to hold nodes that are kept.
-    parents = startnodes.map (n) -> n.parent
-    matchupast nodes, parents, ast
+    parents = nodes.map (n) -> n.parent
+    matchupast roots, parents, ast
 
-    # keep startnodes for parents that passed matching
-    startnodes.reduce (coll, n, i) ->
+    # keep nodes for parents that passed matching
+    nodes.reduce (coll, n, i) ->
         coll.push n if parents[i]
         coll
     , []
+
+# expose evl
+matcher.evl = evl

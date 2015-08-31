@@ -68,6 +68,9 @@ INFIX =
 
 parser = (s) ->
 
+    # no string? no parse
+    return (-> null) unless s
+
     # lexer functions
     lex = lexer(s)
     {peek, consume, expect, pos} = lex

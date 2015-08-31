@@ -8,12 +8,14 @@ html = '''
     <i>panda2</i>
     <span class="d">panda3</span>
   </span>
-</div>'
-'''
+</div>'''
 
 z = zu(html)
 
 describe 'no descend', ->
+
+    it 'is ok with nothing', ->
+        eql z.find(), []
 
     it 'selects none', ->
         eql z.find('p'), []

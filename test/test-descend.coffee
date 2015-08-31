@@ -14,8 +14,7 @@ html = '''
       <span class="h"><em>panda5</em></span>
     </span>
   </div>
-</div>'
-'''
+</div>'''
 
 z = zu(html)
 

@@ -1,9 +1,6 @@
-{omap, map, filter, I, uniq, sequence} = require 'fnuc'
+{omap} = require 'fnuc'
 domparser = require './domparser'
-matcher   = require './matcher'
-parser    = require './parser'
-
-defined = filter I
+selectors = require './selectors'
 
 zu = (a) ->
     if typeof a == 'string'
@@ -16,18 +13,15 @@ zu = (a) ->
 # wrap some nodes with zu functions
 wrap = (nodes) -> if nodes.isZu then nodes else Object.defineProperties nodes, fn
 
-# keep only defined unique nodes
-dedup = sequence uniq, defined
-
 # function to expose on every object
-propify = (k, v) -> value:v
-fn = omap(propify)
+zufn = omap (k, v) -> value:v
+fn = zufn
     isZu: true
     xml:  -> domparser.renderXml  this
     html: -> domparser.renderHtml this
-    find:     (sel) -> wrap matcher this, parser(sel)()
-    parent:   (sel) -> wrap dedup map this, (n) -> n.parent
-    closest:  (sel) ->
+    find:     (sel) -> wrap selectors.find this, sel
+    parent:   (sel) -> wrap selectors.parent this, sel
+    closest:  (sel) -> wrap selectors.closest this, sel
     next:     (sel) ->
     prev:     (sel) ->
     siblings: (sel) ->
