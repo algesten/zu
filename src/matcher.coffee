@@ -1,7 +1,7 @@
 escre = require './escre'
 
 # XXX possible to optimize to avoid compiling new regexp
-hasclass = (n, clz) -> !!n.attribs?.class.match RegExp "(^| )#{clz}($| )"
+hasclass = (n, clz) -> !!n.attribs?.class?.match RegExp "(^| )#{clz}($| )"
 isId = (n, id) -> n.attribs?.id == id
 
 # evaluate attribute selector

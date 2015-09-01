@@ -19,12 +19,12 @@ fn = zufn
     isZu: true
     xml:  -> domparser.renderXml  this
     html: -> domparser.renderHtml this
-    find:     (sel) -> wrap selectors.find this, sel
-    parent:   (sel) -> wrap selectors.parent this, sel
-    closest:  (sel) -> wrap selectors.closest this, sel
-    next:     (sel) ->
-    prev:     (sel) ->
-    siblings: (sel) ->
+    find:     (sel) -> wrap selectors.find     this, sel
+    closest:  (sel) -> wrap selectors.closest  this, sel
+    parent:   (sel) -> wrap selectors.parent   this, sel
+    next:     (sel) -> wrap selectors.next     this, sel
+    prev:     (sel) -> wrap selectors.prev     this, sel
+    siblings: (sel) -> wrap selectors.siblings this, sel
     children: (sel) ->
     attr:     (name) ->
     data:     (name) ->

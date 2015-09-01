@@ -17,6 +17,9 @@ describe 'no descend', ->
     it 'is ok with nothing', ->
         eql z.find(), []
 
+    it 'works for only class', ->
+        eql z.find('.c'), ['<span.c>']
+
     it 'selects none', ->
         eql z.find('p'), []
 
