@@ -28,8 +28,15 @@ doparse = (s, opts) ->
     parser.end()
     dom
 
+renderText = (nodes, out) -> for n in nodes
+    if n.type == 'tag' and n.children
+        renderText n.children, out
+    else if n.type == 'text'
+        out.push n.data
+
 module.exports =
     xml:  (s) -> doparse s, {xmlMode:true}
     html: (s) -> doparse s
     renderXml:  (dom) -> serialize dom, xmlMode:true
     renderHtml: (dom) -> serialize dom
+    renderText: (dom) -> renderText dom, (out = []); out.join('')

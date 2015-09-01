@@ -19,6 +19,7 @@ fn = zufn
     isZu: true
     xml:  -> domparser.renderXml  this
     html: -> domparser.renderHtml this
+    text: -> domparser.renderText this
     find:     (sel) -> wrap selectors.find     this, sel
     closest:  (sel) -> wrap selectors.closest  this, sel
     parent:   (sel) -> wrap selectors.parent   this, sel

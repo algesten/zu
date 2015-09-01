@@ -4,7 +4,7 @@ global.expect = chai.expect
 
 # helper node comparison function
 global.eql = (nodes, cmp) ->
-    if typeof nodes == 'object'
-        assert.equal nodes.toString(), cmp
-    else
+    if Array.isArray nodes
         assert.deepEqual nodes.map((n)->n.toString()), cmp
+    else
+        assert.equal nodes.toString(), cmp
