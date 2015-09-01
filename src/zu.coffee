@@ -26,7 +26,7 @@ fn = zufn
     next:     (sel) -> wrap selectors.next     this, sel
     prev:     (sel) -> wrap selectors.prev     this, sel
     siblings: (sel) -> wrap selectors.siblings this, sel
-    children: (sel) ->
+    children: (sel) -> wrap selectors.children this, sel
     attr:     (name) ->
     data:     (name) ->
     hasClass: (name) ->

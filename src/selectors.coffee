@@ -100,3 +100,8 @@ module.exports =
             {nodes, coll} = collector ast
             walk roots, coll
             matcher roots, uniq(nodes), ast
+
+    children: do ->
+        down = (nodes, fn) -> for n in nodes when n.children
+            fn cn for cn in n.children when cn.type == 'tag'
+        onestep down, I

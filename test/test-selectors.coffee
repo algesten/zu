@@ -72,3 +72,14 @@ describe 'siblings', ->
 
     it 'qualified with a selector', ->
         eql z.find('.c').siblings('b'), ['<b>']
+
+describe 'children', ->
+
+    it 'selects the children', ->
+        eql z.find('span').children(), ['<i>', '<span.d>', '<i>', '<span.h>', '<em>']
+
+    it 'selects none unless children', ->
+        eql z.find('em').children(), []
+
+    it 'qualifies with a selector', ->
+        eql z.find('span').children('span'), ['<span.d>', '<span.h>' ]
