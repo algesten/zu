@@ -12,6 +12,7 @@ html = '''
     <span class="g">
       <i>panda4</i>
       <span class="h"><em>panda5</em></span>
+      <p>qwe</p>
     </span>
   </div>
 </div>'''
@@ -40,6 +41,14 @@ describe 'parent', ->
     it 'qualified using selector', ->
         eql zu.parent(zu.find(ns,'i'),'div#b > span'), ['<span.g>']
 
+describe 'parents', ->
+
+    it 'selects all parents', ->
+        eql zu.parents(zu.find(ns,'em')), ['<span.h>', '<span.g>', '<div#b.e.f>', '<div#a.a.b>']
+
+    it 'qualifies using selector', ->
+        eql zu.parents(zu.find(ns,'em'),'#b'), ['<div#b.e.f>']
+
 describe 'next', ->
 
     it 'selects the next sibling', ->
@@ -47,6 +56,17 @@ describe 'next', ->
 
     it 'selects none if no next sibling', ->
         eql zu.next(zu.find(ns,'div#b')), []
+
+    it 'qualifies using a selector', ->
+        eql zu.next(zu.find(ns,'i'),'.d'), ['<span.d>']
+
+describe 'nextAll', ->
+
+    it 'selects all following siblings', ->
+        eql zu.nextAll(zu.find(ns,'.g i')), ['<span.h>', '<p>']
+
+    it 'selects none if no next sibling', ->
+        eql zu.nextAll(zu.find(ns,'.g p')), []
 
     it 'qualifies using a selector', ->
         eql zu.next(zu.find(ns,'i'),'.d'), ['<span.d>']
@@ -62,6 +82,17 @@ describe 'prev', ->
     it 'qualifies using a selector', ->
         eql zu.prev(zu.find(ns,'span'),'b'), ['<b>']
 
+describe 'prevAll', ->
+
+    it 'selects all previous siblings', ->
+        eql zu.prevAll(zu.find(ns,'.g p')), ['<span.h>','<i>']
+
+    it 'selects none if no previous sibling', ->
+        eql zu.prevAll(zu.find(ns,'i')), []
+
+    it 'qualifies using a selector', ->
+        eql zu.prevAll(zu.find(ns,'.g p'),'i'), ['<i>']
+
 describe 'siblings', ->
 
     it 'selects siblings both right/left', ->
@@ -76,10 +107,19 @@ describe 'siblings', ->
 describe 'children', ->
 
     it 'selects the children', ->
-        eql zu.children(zu.find(ns,'span')), ['<i>', '<span.d>', '<i>', '<span.h>', '<em>']
+        eql zu.children(zu.find(ns,'span')), ['<i>', '<span.d>', '<i>', '<span.h>', '<p>', '<em>']
 
     it 'selects none unless children', ->
         eql zu.children(zu.find(ns,'em')), []
 
     it 'qualifies with a selector', ->
         eql zu.children(zu.find(ns,'span'),'span'), ['<span.d>', '<span.h>' ]
+
+describe 'is', ->
+
+    it 'returns true if any child matches the selector', ->
+        assert.equal zu.is(zu.find(ns,'em'), 'em'), true
+        assert.equal zu.is(zu.find(ns,'span'), '.d'), true
+
+    it 'returns false if no child matches the selector', ->
+        assert.equal zu.is(zu.find(ns,'span'), 'em'), false

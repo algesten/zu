@@ -15,8 +15,9 @@ collector = (ast) ->
 
 parse = (sel) -> parser(sel)()
 
-onestep = (walk, pre) -> (roots, sel) ->
+exec = (walk, pre, emptyast) -> (roots, sel) ->
     ast = parse sel
+    return [] if emptyast and !ast
     {nodes, coll} = collector ast
     walk roots, coll
     matcher roots, pre(nodes), ast
@@ -41,12 +42,7 @@ module.exports =
                 fn n
                 walk n.children, fn if n.children
             null
-        (roots, sel) ->
-            ast = parse sel
-            return [] unless ast # special case
-            {nodes, coll} = collector ast
-            walk roots, coll
-            matcher roots, nodes, ast
+        exec walk, I, true
 
     closest: do ->
         up = (n, fn) ->
@@ -56,30 +52,55 @@ module.exports =
         walkup = (nodes, fn) ->
             up(n, fn) for n in nodes
             null
-        (roots, sel) ->
-            ast = parse sel
-            return [] unless ast # special case
-            {nodes, coll} = collector ast
-            walkup roots, coll
-            matcher roots, uniq(nodes), ast
+        exec walkup, uniq, true
 
     parent: do ->
         up = (nodes, fn) ->
             fn n.parent for n in nodes when n.parent
             null
-        onestep up, uniq
+        exec up, uniq
+
+    parents: do ->
+        up = (n, fn) ->
+            ret = fn n
+            up(n.parent, fn) if n.parent
+            null
+        walkup = (nodes, fn) ->
+            up(n.parent, fn) for n in nodes when n.parent
+            null
+        exec walkup, uniq
 
     next: do ->
         right = (nodes, fn) ->
             fn p for n in nodes when p = tagnext(n)
             null
-        onestep right, I
+        exec right, I
+
+    nextAll: do ->
+        right = (n, fn) ->
+            ret = fn n if n.type == 'tag'
+            right(n.next, fn) if n.next
+            null
+        walkright = (nodes, fn) ->
+            right(n.next, fn) for n in nodes when n.next
+            null
+        exec walkright, I
 
     prev: do ->
         left = (nodes, fn) ->
             fn p for n in nodes when p = tagprev(n)
             null
-        onestep left, I
+        exec left, I
+
+    prevAll: do ->
+        left = (n, fn) ->
+            ret = fn n if n.type == 'tag'
+            left(n.prev, fn) if n.prev
+            null
+        walkleft = (nodes, fn) ->
+            left(n.prev, fn) for n in nodes when n.prev
+            null
+        exec walkleft, I
 
     siblings: do ->
         left  = (n, fn) ->
@@ -95,13 +116,18 @@ module.exports =
                 left n, fn
                 right n, fn
             null
-        (roots, sel) ->
-            ast = parse sel
-            {nodes, coll} = collector ast
-            walk roots, coll
-            matcher roots, uniq(nodes), ast
+        exec walk, I
 
     children: do ->
         down = (nodes, fn) -> for n in nodes when n.children
             fn cn for cn in n.children when cn.type == 'tag'
-        onestep down, I
+        exec down, I
+
+    is: do ->
+        walk = (nodes, fn) ->
+            fn n for n in nodes
+        (roots, sel) ->
+            ast = parse sel
+            {nodes, coll} = collector ast
+            walk roots, coll
+            !!matcher(roots, nodes, ast).length

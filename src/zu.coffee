@@ -34,8 +34,12 @@ module.exports = zu = mixin {
         find:      (ns, sel) -> selectors.find     ns, sel
         closest:   (ns, sel) -> selectors.closest  ns, sel
         parent:    (ns, sel) -> selectors.parent   ns, sel
+        parents:   (ns, sel) -> selectors.parents  ns, sel
         next:      (ns, sel) -> selectors.next     ns, sel
+        nextAll:   (ns, sel) -> selectors.nextAll  ns, sel
         prev:      (ns, sel) -> selectors.prev     ns, sel
+        prevAll:   (ns, sel) -> selectors.prevAll  ns, sel
         siblings:  (ns, sel) -> selectors.siblings ns, sel
         children:  (ns, sel) -> selectors.children ns, sel
+        is:        (ns, sel) -> selectors.is       ns, sel
     )
