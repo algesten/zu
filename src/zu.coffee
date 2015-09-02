@@ -1,6 +1,7 @@
 {omap} = require 'fnuc'
 domparser = require './domparser'
 selectors = require './selectors'
+hasclass  = require './hasclass'
 
 zu = (a) ->
     if typeof a == 'string'
@@ -20,6 +21,8 @@ fn = zufn
     xml:  -> domparser.renderXml  this
     html: -> domparser.renderHtml this
     text: -> domparser.renderText this
+    attr:     (name) -> this[0]?.attribs?[name]
+    hasClass: (name) -> return true for n in this when hasclass(n, name); return false
     find:     (sel) -> wrap selectors.find     this, sel
     closest:  (sel) -> wrap selectors.closest  this, sel
     parent:   (sel) -> wrap selectors.parent   this, sel
@@ -27,8 +30,5 @@ fn = zufn
     prev:     (sel) -> wrap selectors.prev     this, sel
     siblings: (sel) -> wrap selectors.siblings this, sel
     children: (sel) -> wrap selectors.children this, sel
-    attr:     (name) ->
-    data:     (name) ->
-    hasClass: (name) ->
 
 module.exports = zu
