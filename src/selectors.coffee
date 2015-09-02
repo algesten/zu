@@ -123,11 +123,9 @@ module.exports =
             fn cn for cn in n.children when cn.type == 'tag'
         exec down, I
 
-    is: do ->
+    filter: do ->
         walk = (nodes, fn) ->
             fn n for n in nodes
-        (roots, sel) ->
-            ast = parse sel
-            {nodes, coll} = collector ast
-            walk roots, coll
-            !!matcher(roots, nodes, ast).length
+        exec walk, I
+
+    is: (roots, sel) -> !!@filter(roots, sel).length

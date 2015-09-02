@@ -41,5 +41,6 @@ module.exports = zu = mixin {
         prevAll:   (ns, sel) -> selectors.prevAll  ns, sel
         siblings:  (ns, sel) -> selectors.siblings ns, sel
         children:  (ns, sel) -> selectors.children ns, sel
+        filter:    (ns, sel) -> selectors.filter   ns, sel
         is:        (ns, sel) -> selectors.is       ns, sel
     )

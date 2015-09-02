@@ -115,6 +115,14 @@ describe 'children', ->
     it 'qualifies with a selector', ->
         eql zu.children(zu.find(ns,'span'),'span'), ['<span.d>', '<span.h>' ]
 
+describe 'filter', ->
+
+    it 'filters the nodes by a selector', ->
+        eql zu.filter(zu.children(ns),'div'), ['<div#b.e.f>']
+
+    it 'doesnt filter if not selector', ->
+        eql zu.filter(zu.children(ns), null), ['<b>', '<span.c>', '<div#b.e.f>']
+
 describe 'is', ->
 
     it 'returns true if any child matches the selector', ->
