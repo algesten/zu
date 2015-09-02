@@ -3,7 +3,7 @@ domparser = require './domparser'
 selectors = require './selectors'
 hasclass  = require './hasclass'
 
-curryv = (k, v) -> curry v
+currykv = (k, v) -> curry v
 
 # special curry that allows the following forms
 #    find(ns, sel)             // apply find(ns, sel)
@@ -27,7 +27,7 @@ module.exports = zu = mixin {
     xml:       (ns) -> domparser.renderXml ns
     html:      (ns) -> domparser.renderHtml ns
     text:      (ns) -> domparser.renderText ns
-    }, (omap(curryv)
+    }, (omap(currykv)
         attr:      (ns, name) -> ns[0]?.attribs?[name]
         hasClass:  (ns, name) -> return true for n in ns when hasclass(n, name); return false
     ), (omap(curryish)
