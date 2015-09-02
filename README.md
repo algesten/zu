@@ -16,6 +16,8 @@ however jQuery is an acquired taste, and with my latest foragings into
 
 ### Goals
 
+* Composable functions, not methods.
+
 * Selectors returns `Array`s, not array-like objects. This means
   functional libraries such as [fnuc][2] and [Ramda][3] can
   interoperate.

@@ -10,27 +10,27 @@ html = '''
   </span>
 </div>'''
 
-z = zu(html)
+ns = zu.parse html
 
 describe 'no descend', ->
 
     it 'is ok with nothing', ->
-        eql z.find(), []
+        eql zu.find(ns, null), []
 
     it 'works for only class', ->
-        eql z.find('.c'), ['<span.c>']
+        eql zu.find(ns, '.c'), ['<span.c>']
 
     it 'selects none', ->
-        eql z.find('p'), []
+        eql zu.find(ns, 'p'), []
 
     it 'selects top level', ->
-        eql z.find('div'), ['<div#a.a.b>']
+        eql zu.find(ns, 'div'), ['<div#a.a.b>']
 
     it 'selects one level down', ->
-        eql z.find('b'), ['<b>']
+        eql zu.find(ns, 'b'), ['<b>']
 
     it 'selects two levels down', ->
-        eql z.find('i'), ['<i>']
+        eql zu.find(ns, 'i'), ['<i>']
 
     it 'selects multiple levels', ->
-        eql z.find('span'), ['<span.c>','<span.d>']
+        eql zu.find(ns, 'span'), ['<span.c>','<span.d>']

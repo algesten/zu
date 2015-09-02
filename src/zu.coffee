@@ -1,34 +1,24 @@
-{omap} = require 'fnuc'
+{omap, curry} = require 'fnuc'
 domparser = require './domparser'
 selectors = require './selectors'
 hasclass  = require './hasclass'
 
-zu = (a) ->
-    if typeof a == 'string'
-        wrap domparser.xml a
-    else if Array.isArray a
-        wrap a
-    else
-        throw new Error("What to do with: " + a)
+curryv = (k, v) -> curry v
 
-# wrap some nodes with zu functions
-wrap = (nodes) -> if nodes.isZu then nodes else Object.defineProperties nodes, fn
+module.exports = zu = omap(curryv)
 
-# function to expose on every object
-zufn = omap (k, v) -> value:v
-fn = zufn
-    isZu: true
-    xml:  -> domparser.renderXml  this
-    html: -> domparser.renderHtml this
-    text: -> domparser.renderText this
-    attr:     (name) -> this[0]?.attribs?[name]
-    hasClass: (name) -> return true for n in this when hasclass(n, name); return false
-    find:     (sel) -> wrap selectors.find     this, sel
-    closest:  (sel) -> wrap selectors.closest  this, sel
-    parent:   (sel) -> wrap selectors.parent   this, sel
-    next:     (sel) -> wrap selectors.next     this, sel
-    prev:     (sel) -> wrap selectors.prev     this, sel
-    siblings: (sel) -> wrap selectors.siblings this, sel
-    children: (sel) -> wrap selectors.children this, sel
+    parse:     (a) -> domparser.xml a
+    parseHtml: (a) -> domparser.html a
 
-module.exports = zu
+    xml:       (ns) -> domparser.renderXml ns
+    html:      (ns) -> domparser.renderHtml ns
+    text:      (ns) -> domparser.renderText ns
+    attr:      (ns, name) -> ns[0]?.attribs?[name]
+    hasClass:  (ns, name) -> return true for n in ns when hasclass(n, name); return false
+    find:      (ns, sel) -> selectors.find     ns, sel
+    closest:   (ns, sel) -> selectors.closest  ns, sel
+    parent:    (ns, sel) -> selectors.parent   ns, sel
+    next:      (ns, sel) -> selectors.next     ns, sel
+    prev:      (ns, sel) -> selectors.prev     ns, sel
+    siblings:  (ns, sel) -> selectors.siblings ns, sel
+    children:  (ns, sel) -> selectors.children ns, sel

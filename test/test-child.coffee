@@ -17,45 +17,45 @@ html = '''
 </div>'
 '''
 
-z = zu(html)
+ns = zu.parse html
 
 describe 'child', ->
 
     describe 'single', ->
 
         it 'selects none', ->
-            eql z.find('div > p'), []
+            eql zu.find(ns, 'div > p'), []
 
         it 'selects one level down', ->
-            eql z.find('div > b'), ['<b>']
+            eql zu.find(ns, 'div > b'), ['<b>']
 
         it 'does not select two levels down', ->
-            eql z.find('div > i'), []
+            eql zu.find(ns, 'div > i'), []
 
         it 'selects multiple levels', ->
-            eql z.find('div > span.c'), ['<span.c>']
+            eql zu.find(ns, 'div > span.c'), ['<span.c>']
 
     describe 'multiple', ->
 
         it 'selects none', ->
-            eql z.find('div > div > p'), []
+            eql zu.find(ns, 'div > div > p'), []
 
         it 'selects two levels down', ->
-            eql z.find('div > div > span > i'), ['<i>']
+            eql zu.find(ns, 'div > div > span > i'), ['<i>']
 
         it 'selects multiple levels', ->
-            eql z.find('div > div > span'), ['<span.g>']
+            eql zu.find(ns, 'div > div > span'), ['<span.g>']
 
         it 'selects at different depths', ->
-            eql z.find('div > span'), ['<span.c>', '<span.g>']
+            eql zu.find(ns, 'div > span'), ['<span.c>', '<span.g>']
 
     describe 'immediate', ->
 
         it 'selects none', ->
-            eql z.find('> p'), []
+            eql zu.find(ns, '> p'), []
 
         it 'selects immediate descendant of root', ->
-            eql z.find('> span'), ['<span.c>']
+            eql zu.find(ns, '> span'), ['<span.c>']
 
         it 'selects further descendant of root', ->
-            eql z.find('> span.c i'), ['<i>']
+            eql zu.find(ns, '> span.c i'), ['<i>']

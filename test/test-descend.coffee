@@ -16,36 +16,36 @@ html = '''
   </div>
 </div>'''
 
-z = zu(html)
+ns = zu.parse html
 
 describe 'descend', ->
 
     describe 'single', ->
 
         it 'selects none', ->
-            eql z.find('div p'), []
+            eql zu.find(ns, 'div p'), []
 
         it 'selects one level down', ->
-            eql z.find('div b'), ['<b>']
+            eql zu.find(ns, 'div b'), ['<b>']
 
         it 'selects two levels down', ->
-            eql z.find('div i'), ['<i>', '<i>']
+            eql zu.find(ns, 'div i'), ['<i>', '<i>']
 
         it 'selects multiple levels', ->
-            eql z.find('div span'), ['<span.c>','<span.d>','<span.g>','<span.h>']
+            eql zu.find(ns, 'div span'), ['<span.c>','<span.d>','<span.g>','<span.h>']
 
     describe 'multiple', ->
 
         it 'selects none', ->
-            eql z.find('div div p'), []
+            eql zu.find(ns, 'div div p'), []
 
         it 'selects two levels down', ->
-            eql z.find('div div i'), ['<i>']
+            eql zu.find(ns, 'div div i'), ['<i>']
 
         it 'selects multiple levels', ->
-            eql z.find('div div span'), ['<span.g>','<span.h>']
+            eql zu.find(ns, 'div div span'), ['<span.g>','<span.h>']
 
     describe 'multiple apart', ->
 
         it 'selects', ->
-            eql z.find('div#a span.g em'), ['<em>']
+            eql zu.find(ns, 'div#a span.g em'), ['<em>']

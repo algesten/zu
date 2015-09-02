@@ -21,33 +21,33 @@ html = '''
 </div>
 '''
 
-z = zu(html)
+ns = zu.parse html
 
 describe 'attrib', ->
 
     it 'selects just span[lang]', ->
-        eql z.find('span[lang]'), ['<span.s1>', '<span.s2>', '<span.s3>', '<span.s4>']
+        eql zu.find(ns, 'span[lang]'), ['<span.s1>', '<span.s2>', '<span.s3>', '<span.s4>']
 
     it 'selects span[lang="pt"]', ->
-        eql z.find('span[lang=pt]'), ['<span.s2>']
+        eql zu.find(ns, 'span[lang=pt]'), ['<span.s2>']
 
     it 'selects span[lang=pt]', ->
-        eql z.find('span[lang=pt]'), ['<span.s2>']
+        eql zu.find(ns, 'span[lang=pt]'), ['<span.s2>']
 
     it 'selects span[foo=""]', ->
-        eql z.find('span[foo=""]'), ['<span.s5>']
+        eql zu.find(ns, 'span[foo=""]'), ['<span.s5>']
 
     it 'selects span[lang~=en-us]', ->
-        eql z.find('span[lang~=en-us]'), ['<span.s1>']
+        eql zu.find(ns, 'span[lang~=en-us]'), ['<span.s1>']
 
     it 'selects span[lang|=zh]', ->
-        eql z.find('span[lang|=zh]'), ['<span.s3>', '<span.s4>']
+        eql zu.find(ns, 'span[lang|=zh]'), ['<span.s3>', '<span.s4>']
 
     it 'selects a[href^="#"]', ->
-        eql z.find('a[href^="#"]'), ['<a.a2>']
+        eql zu.find(ns, 'a[href^="#"]'), ['<a.a2>']
 
     it 'selects a[href$=".cn"]', ->
-        eql z.find('a[href$=".cn"]'), ['<a.a3>', '<a.a4>']
+        eql zu.find(ns, 'a[href$=".cn"]'), ['<a.a3>', '<a.a4>']
 
     it 'selects a[href*="example"]', ->
-        eql z.find('a[href*="example"]'), ['<a.a1>','<a.a3>','<a.a4>']
+        eql zu.find(ns, 'a[href*="example"]'), ['<a.a1>','<a.a3>','<a.a4>']
