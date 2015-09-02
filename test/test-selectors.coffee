@@ -21,7 +21,7 @@ ns = zu.parse html
 describe 'closest', ->
 
     it 'selects nothing for nothing', ->
-        eql zu.closest(zu.find(ns,'i'),null), []
+        eql zu.closest(zu.find(ns,'i')), []
 
     it 'selects self', ->
         eql zu.closest(zu.find(ns,'i'),'i'), ['<i>', '<i>']
@@ -35,7 +35,7 @@ describe 'closest', ->
 describe 'parent', ->
 
     it 'selects immediate parent', ->
-        eql zu.parent(zu.find(ns,'i'),null), ['<span.c>', '<span.g>']
+        eql zu.parent(zu.find(ns,'i')), ['<span.c>', '<span.g>']
 
     it 'qualified using selector', ->
         eql zu.parent(zu.find(ns,'i'),'div#b > span'), ['<span.g>']
@@ -43,10 +43,10 @@ describe 'parent', ->
 describe 'next', ->
 
     it 'selects the next sibling', ->
-        eql zu.next(zu.find(ns,'i'),null), ['<span.d>', '<span.h>']
+        eql zu.next(zu.find(ns,'i')), ['<span.d>', '<span.h>']
 
     it 'selects none if no next sibling', ->
-        eql zu.next(zu.find(ns,'div#b'),null), []
+        eql zu.next(zu.find(ns,'div#b')), []
 
     it 'qualifies using a selector', ->
         eql zu.next(zu.find(ns,'i'),'.d'), ['<span.d>']
@@ -54,10 +54,10 @@ describe 'next', ->
 describe 'prev', ->
 
     it 'selects the previous sibling', ->
-        eql zu.prev(zu.next(zu.find(ns,'i'),null), null), ['<i>', '<i>']
+        eql zu.prev(zu.next(zu.find(ns,'i'))), ['<i>', '<i>']
 
     it 'selects none if no previous sibling', ->
-        eql zu.prev(zu.find(ns,'i'),null), []
+        eql zu.prev(zu.find(ns,'i')), []
 
     it 'qualifies using a selector', ->
         eql zu.prev(zu.find(ns,'span'),'b'), ['<b>']
@@ -65,10 +65,10 @@ describe 'prev', ->
 describe 'siblings', ->
 
     it 'selects siblings both right/left', ->
-        eql zu.siblings(zu.find(ns,'.c'),null), ['<b>','<div#b.e.f>']
+        eql zu.siblings(zu.find(ns,'.c')), ['<b>','<div#b.e.f>']
 
     it 'selects no if there are none', ->
-        eql zu.siblings(zu.find(ns,'#a'),null), []
+        eql zu.siblings(zu.find(ns,'#a')), []
 
     it 'qualified with a selector', ->
         eql zu.siblings(zu.find(ns,'.c'),'b'), ['<b>']
@@ -76,10 +76,10 @@ describe 'siblings', ->
 describe 'children', ->
 
     it 'selects the children', ->
-        eql zu.children(zu.find(ns,'span'),null), ['<i>', '<span.d>', '<i>', '<span.h>', '<em>']
+        eql zu.children(zu.find(ns,'span')), ['<i>', '<span.d>', '<i>', '<span.h>', '<em>']
 
     it 'selects none unless children', ->
-        eql zu.children(zu.find(ns,'em'),null), []
+        eql zu.children(zu.find(ns,'em')), []
 
     it 'qualifies with a selector', ->
         eql zu.children(zu.find(ns,'span'),'span'), ['<span.d>', '<span.h>' ]

@@ -15,7 +15,7 @@ ns = zu.parse html
 describe 'no descend', ->
 
     it 'is ok with nothing', ->
-        eql zu.find(ns, null), []
+        eql zu.find(ns), []
 
     it 'works for only class', ->
         eql zu.find(ns, '.c'), ['<span.c>']
