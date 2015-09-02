@@ -39,5 +39,3 @@ module.exports = zu = mixin {
         siblings:  (ns, sel) -> selectors.siblings ns, sel
         children:  (ns, sel) -> selectors.children ns, sel
     )
-
-console.log zu
