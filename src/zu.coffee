@@ -1,4 +1,4 @@
-{omap, curry, mixin, sequence} = require 'fnuc'
+{keys, get, set, map, omap, curry, mixin, sequence} = require 'fnuc'
 domparser = require './domparser'
 selectors = require './selectors'
 hasclass  = require './hasclass'
@@ -6,26 +6,23 @@ hasclass  = require './hasclass'
 # pick the second argument
 arg2 = (a1, a2) -> a2
 
-# special curry that allows the following forms
-#    find(ns, sel)             // apply find(ns, sel)
-#    find(ns)                  // apply find(ns, null)
-#    find(sel)                 // return (ns) -> fn(ns, sel)
-curryish = (fn) -> cfn = (ns, sel) ->
-    if arguments.length == 0
-        cfn
-    else if arguments.length == 1
-        if Array.isArray ns
-            fn ns, null
-        else
-            sel = ns
-            (ns) -> fn ns, sel
-    else
-        fn ns, sel
-
 # wrap the first argument to fn in an array, if it isn't an array.
 arrfirst = (fn) -> (as...) ->
     as[0] = [v] unless Array.isArray v = as[0]
     fn as...
+
+# fn can be partially applied either with an array or an expression.
+withcurry = (fn) -> (a) -> if Array.isArray a then ((exp) -> fn a, exp) else ((ns)  -> fn ns, a)
+
+# turn k, v into {k:v}
+keyval = (k, v) -> set {}, k, v
+
+# for an object a:fn make an object with {a:fn, aWith:withcurry(fn)}
+# for each k/v pair.
+withify = (o) -> mixin (map keys(o), (k) ->
+    fn = arrfirst get o, k
+    mixin keyval(k, fn), keyval("#{k}With", withcurry(fn))
+    )...
 
 module.exports = zu = mixin {
     parseXml:  (a) -> domparser.xml a
@@ -34,10 +31,10 @@ module.exports = zu = mixin {
         xml:       (ns) -> domparser.renderXml ns
         html:      (ns) -> domparser.renderHtml ns
         text:      (ns) -> domparser.renderText ns
-    ), (omap(sequence arg2, arrfirst, curry)
+    ), (withify
         attr:      (ns, name) -> ns[0]?.attribs?[name]
         hasClass:  (ns, name) -> return true for n in ns when hasclass(n, name); return false
-    ), (omap(sequence arg2, arrfirst, curryish)
+    ), (withify
         find:      (ns, exp) -> selectors.find     ns, exp
         closest:   (ns, exp) -> selectors.closest  ns, exp
         parent:    (ns, exp) -> selectors.parent   ns, exp

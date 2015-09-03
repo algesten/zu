@@ -47,36 +47,45 @@ var subs  = zu.find(nodes, 'div#a > span.b');
 
 ### Curry
 
-Two argument functions are curried. For all [selectors](#selectors)
-the curry takes these forms (illustrated by `children`, but applicable
-to all selectors).
+Each `zu.[something]` that takes two arguments also have a curried
+version `zu.[something]With` Example illustrated with `zu.parent`.
 
 ##### Both arguments
 
 No curry here.
 
-```coffee
-zu.children(nodes, selector)
-```
-
-##### Binding a selector
-
-Partial application of (string) expression.
+`:: ns, s -> ns`
 
 ```javascript
-var sel  = zu.children(expr);   // sel is a function operating on node
-var subs = sel(nodes)           // apply sel on nodes to get some children
+zu.parent(nodes, exp);
 ```
 
-##### No expression
+##### One argument
 
-This form may be surprising for functional purists. It's a compromise
-to allow use of the selection functions without a "filtering"
-selection expression.
+Equivalent to having `null` as second argument.
+
+`:: ns -> ns`
 
 ```javascript
-var subs = zu.children(nodes);      // no selector, just get all children
+zu.parent(nodes);
 ```
+
+##### Partially applied nodes
+
+`:: ns -> s -> ns`
+
+```javascript
+zu.parentWith(nodes);
+```
+
+##### Partially applied with expression
+
+`:: s -> ns -> ns`
+
+```javascript
+zu.parentWith(exp);
+```
+
 
 ## CSS Selectors
 
@@ -101,9 +110,13 @@ The following selectors are (currently) supported:
 
 ##### parseXml(str)
 
+`:: s -> ns`
+
 Parse an XML string to an array of nodes.
 
 ##### parseHtml(str)
+
+`:: s -> ns`
 
 Parse an HTML string to an array of nodes. The difference from XML is
 that certain HTML elements get special treatment. `<script>` contents
@@ -115,23 +128,43 @@ are not further parsed, `<img>` tags does not need closing etc.
 
 ##### xml(nodes)
 
+`:: ns -> s`
+
 Turn given array of nodes into a string XML form.
 
 ##### html(nodes)
 
+`:: ns -> s`
+
 Turn given array of nodes into a string HTML form.
 
 ##### text(nodes)
+
+`:: ns -> s`
 
 Turn given array of text nodes into a string, where the
 contents of each node is concatenated together.
 
 ##### attr(nodes, name)
 
+* `:: ns, s -> s`
+
+Also `attrWith(nodes or name)`
+
+* `:: ns -> s  -> s`
+* `:: s  -> ns -> s`
+
 Return the attribute value for `names` from the first element in the
 given array of nodes.
 
 ##### hasClass(nodes, name)
+
+* `:: ns, s -> s`
+
+Also `hasClassWith(nodes or name)`
+
+* `:: ns -> s  -> s`
+* `:: s  -> ns -> s`
 
 Test whether any node in the given array of nodes has a `name` as a
 class.
@@ -143,7 +176,11 @@ class.
 ##### find(nodes, exp)
 
 * `:: ns, s -> ns`
-* `:: s -> ns -> ns`
+
+Also `findWith(nodes or exp)`
+
+* `:: s  -> ns -> ns`
+* `:: ns -> s  -> ns`
 
 Match the given nodes, and any descendants of the given nodes against
 the given expression.
@@ -151,8 +188,12 @@ the given expression.
 ##### children(nodes, exp)
 
 * `:: ns, s -> ns`
-* `:: s -> ns -> ns`
 * `:: ns -> ns`
+
+Also `childrenWith(nodes or exp)`
+
+* `:: s  -> ns -> ns`
+* `:: ns -> s  -> ns`
 
 Match the immediate children of the given nodes against the given
 expression. Also `children(nodes)` to get immediate children without
@@ -161,7 +202,12 @@ any filtering expression.
 #####  closest(nodes, exp)
 
 * `:: ns, s -> ns`
-* `:: s -> ns -> ns`
+* `:: ns -> ns`
+
+Also `closestWith(nodes or exp)`
+
+* `:: s  -> ns -> ns`
+* `:: ns -> s  -> ns`
 
 Test the given set of nodes and recursively parent nodes against
 expression and return the first match.
@@ -169,8 +215,12 @@ expression and return the first match.
 ##### filter(nodes, exp)
 
 * `:: ns, s -> ns`
-* `:: s -> ns -> ns`
 * `:: ns -> ns`
+
+Also `filterWith(nodes or exp)`
+
+* `:: s  -> ns -> ns`
+* `:: ns -> s  -> ns`
 
 Filter the given set of nodes using the expression. Also
 `filter(nodes)` just returns the same nodes (however in a new array).
@@ -178,8 +228,12 @@ Filter the given set of nodes using the expression. Also
 ##### is(nodes, exp)
 
 * `:: ns, s -> bool`
-* `:: s -> ns -> bool`
 * `:: ns -> bool`
+
+Also `isWith(nodes or exp)`
+
+* `:: s  -> ns -> bool`
+* `:: ns -> s  -> bool`
 
 Filter the given set of nodes using the expression and tell whether
 any matched.
@@ -187,8 +241,12 @@ any matched.
 ##### next(nodes, exp)
 
 * `:: ns, s -> ns`
-* `:: s -> ns -> ns`
 * `:: ns -> ns`
+
+Also `nextWith(nodes or exp)`
+
+* `:: s  -> ns -> ns`
+* `:: ns -> s  -> ns`
 
 Select immediate sibling nodes to the right of given nodes, optionally
 apply a filter expression.
@@ -196,8 +254,12 @@ apply a filter expression.
 ##### nextAll(nodes, exp)
 
 * `:: ns, s -> ns`
-* `:: s -> ns -> ns`
 * `:: ns -> ns`
+
+Also `nextAllWith(nodes or exp)`
+
+* `:: s  -> ns -> ns`
+* `:: ns -> s  -> ns`
 
 Select all sibling nodes to the right of the given nodes, optionally
 filtered by an expression.
@@ -205,8 +267,12 @@ filtered by an expression.
 ##### parent(nodes, exp)
 
 * `:: ns, s -> ns`
-* `:: s -> ns -> ns`
 * `:: ns -> ns`
+
+Also `parentWith(nodes or exp)`
+
+* `:: s  -> ns -> ns`
+* `:: ns -> s  -> ns`
 
 Select immediate parent nodes of given nodes, optionally filtered by
 an expression.
@@ -214,8 +280,12 @@ an expression.
 ##### parents(nodes, exp)
 
 * `:: ns, s -> ns`
-* `:: s -> ns -> ns`
 * `:: ns -> ns`
+
+Also `parentsWith(nodes or exp)`
+
+* `:: s  -> ns -> ns`
+* `:: ns -> s  -> ns`
 
 Select all parent nodes of given nodes, optionally filtered by an
 expression.
@@ -223,8 +293,12 @@ expression.
 ##### prev(nodes, exp)
 
 * `:: ns, s -> ns`
-* `:: s -> ns -> ns`
 * `:: ns -> ns`
+
+Also `prevWith(nodes or exp)`
+
+* `:: s  -> ns -> ns`
+* `:: ns -> s  -> ns`
 
 Select immediate sibling nodes to the left of given nodes, optionally
 apply a filter expression.
@@ -232,8 +306,12 @@ apply a filter expression.
 ##### prevAll(nodes, exp)
 
 * `:: ns, s -> ns`
-* `:: s -> ns -> ns`
 * `:: ns -> ns`
+
+Also `prevAllWith(nodes or exp)`
+
+* `:: s  -> ns -> ns`
+* `:: ns -> s  -> ns`
 
 Select all sibling nodes to the left of the given nodes, optionally
 filtered by an expression.
@@ -241,10 +319,14 @@ filtered by an expression.
 ##### siblings(nodes, exp)
 
 * `:: ns, s -> ns`
-* `:: s -> ns -> ns`
 * `:: ns -> ns`
 
-Select all siblong nodes both to the left and right, optionally
+Also `siblingsWith(nodes or exp)`
+
+* `:: s  -> ns -> ns`
+* `:: ns -> s  -> ns`
+
+Select all sibling nodes both to the left and right, optionally
 filtered by an expression.
 
 
