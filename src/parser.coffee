@@ -5,17 +5,6 @@ spc = split ' '
 prec   = (pr) -> (fn) -> fn.pr = pr; fn
 precof = (fn) -> fn?.pr ? 0
 
-tagexp = (type, pr, npr) -> prec(pr) (parse, token) ->
-    ntoken = parse.peek()
-    prx = PREFIX2[ntoken?.type]
-    right = (parse.consume(); prx parse, ntoken) if npr < precof(prx)
-    mixin {type, token, right}
-
-sel_id     = tagexp 'id',     2, 2
-sel_class  = tagexp 'class',  2, 2
-sel_pseudo = tagexp 'pseudo', 2, 2
-sel_word   = tagexp 'word',   3, 1
-
 # get a quoted or unquoted string
 string = (parse) ->
     token = parse.peek()
@@ -31,14 +20,31 @@ string = (parse) ->
     else
         throw new Error "Expected quote or word #{parse.pos()}: #{parse.s}"
 
-sel_attrib = prec(2) (parse, token) ->
+continueright = (parse, token, npr) ->
+    ntoken = parse.peek()
+    prx = PREFIX2[ntoken?.type]
+    if npr < precof(prx)
+        parse.consume()
+        prx parse, ntoken
+
+tagexp = (type, pr, npr) -> prec(pr) (parse, token) ->
+    right = continueright parse, token, npr
+    mixin {type, token, right}
+
+sel_id     = tagexp 'id',     3, 1
+sel_class  = tagexp 'class',  3, 1
+sel_pseudo = tagexp 'pseudo', 3, 1
+sel_word   = tagexp 'word',   2, 2
+
+sel_attrib = prec(4) (parse, token) ->
     attr = string(parse).word
     token = parse.peek()
     attrtype = ATTR_TYPES[token.type]? parse
     throw new Error "Parse failed at col #{parse.pos()}: #{parse.s}" unless attrtype
     attrval = if attrtype == 'exists' then null else string(parse).word
     parse.expect('clbrack')
-    {type:'attrib', token, attrtype, attr, attrval}
+    right = continueright parse, token, 3
+    {type:'attrib', token, attrtype, attr, attrval, right}
 
 ATTR_TYPES = do ->
     symb2 = (type) -> (parse) -> parse.consume(); parse.expect('equals'); type

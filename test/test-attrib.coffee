@@ -57,7 +57,7 @@ describe 'attrib', ->
     it 'selects a[href*="example"]', ->
         eql zu.find(ns, 'a[href*="example"]'), ['<a.a1>','<a.a3>','<a.a4>']
 
-    describe.only 'double attrib selector bug', ->
+    describe 'double attrib selector bug', ->
 
         xml = '''<content><imageList><image type="content">
         <imageRef orientation="landscape" width="1024" height="575" unit="px" priority="1" language="swe" purpose="poster">http://193.75.33.52/images/telia/97715.jpg</imageRef>
