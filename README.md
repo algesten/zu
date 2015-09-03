@@ -78,6 +78,24 @@ selection expression.
 var subs = zu.children(nodes);      // no selector, just get all children
 ```
 
+## CSS Selectors
+
+The following selectors are (currently) supported:
+
+* Descendant `div span`
+* Child `div > span`
+* Class `div.foo`
+* Id `div#bar`
+* Attribute with or without quotes
+  - exists `div[foo]`
+  - equals `div[foo=bar]`
+  - whitespace separated match `div[foo~=bar]`
+  - hyphenated start match `div[foo|=bar]`
+  - starts with `div[foo^=bar]`
+  - ends with `div[foo$=bar]`
+  - substring `div[foo*=bar]`
+
+## API
 
 ### Parsing
 
