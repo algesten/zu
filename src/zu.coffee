@@ -22,7 +22,7 @@ curryish = (k, fn) -> cfn = (ns, sel) ->
         fn ns, sel
 
 module.exports = zu = mixin {
-    parse:     (a) -> domparser.xml a
+    parseXml:  (a) -> domparser.xml a
     parseHtml: (a) -> domparser.html a
     xml:       (ns) -> domparser.renderXml ns
     html:      (ns) -> domparser.renderHtml ns
@@ -31,16 +31,16 @@ module.exports = zu = mixin {
         attr:      (ns, name) -> ns[0]?.attribs?[name]
         hasClass:  (ns, name) -> return true for n in ns when hasclass(n, name); return false
     ), (omap(curryish)
-        find:      (ns, sel) -> selectors.find     ns, sel
-        closest:   (ns, sel) -> selectors.closest  ns, sel
-        parent:    (ns, sel) -> selectors.parent   ns, sel
-        parents:   (ns, sel) -> selectors.parents  ns, sel
-        next:      (ns, sel) -> selectors.next     ns, sel
-        nextAll:   (ns, sel) -> selectors.nextAll  ns, sel
-        prev:      (ns, sel) -> selectors.prev     ns, sel
-        prevAll:   (ns, sel) -> selectors.prevAll  ns, sel
-        siblings:  (ns, sel) -> selectors.siblings ns, sel
-        children:  (ns, sel) -> selectors.children ns, sel
-        filter:    (ns, sel) -> selectors.filter   ns, sel
-        is:        (ns, sel) -> selectors.is       ns, sel
+        find:      (ns, exp) -> selectors.find     ns, exp
+        closest:   (ns, exp) -> selectors.closest  ns, exp
+        parent:    (ns, exp) -> selectors.parent   ns, exp
+        parents:   (ns, exp) -> selectors.parents  ns, exp
+        next:      (ns, exp) -> selectors.next     ns, exp
+        nextAll:   (ns, exp) -> selectors.nextAll  ns, exp
+        prev:      (ns, exp) -> selectors.prev     ns, exp
+        prevAll:   (ns, exp) -> selectors.prevAll  ns, exp
+        siblings:  (ns, exp) -> selectors.siblings ns, exp
+        children:  (ns, exp) -> selectors.children ns, exp
+        filter:    (ns, exp) -> selectors.filter   ns, exp
+        is:        (ns, exp) -> selectors.is       ns, exp
     )

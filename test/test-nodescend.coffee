@@ -10,7 +10,7 @@ html = '''
   </span>
 </div>'''
 
-ns = zu.parse html
+ns = zu.parseHtml html
 
 describe 'no descend', ->
 

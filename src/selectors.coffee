@@ -13,10 +13,10 @@ collector = (ast) ->
     coll = (n) -> nodes.push n if evl(n, lst)
     {nodes, coll}
 
-parse = (sel) -> parser(sel)()
+parse = (exp) -> parser(exp)()
 
-exec = (walk, pre, emptyast) -> (roots, sel) ->
-    ast = parse sel
+exec = (walk, pre, emptyast) -> (roots, exp) ->
+    ast = parse exp
     return [] if emptyast and !ast
     {nodes, coll} = collector ast
     walk roots, coll
@@ -128,4 +128,4 @@ module.exports =
             fn n for n in nodes
         exec walk, I
 
-    is: (roots, sel) -> !!@filter(roots, sel).length
+    is: (roots, exp) -> !!@filter(roots, exp).length

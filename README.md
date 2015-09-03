@@ -42,7 +42,8 @@ var subs  = zu.find(nodes, 'div#a > span.b');
 
 * Performance. Especially matching should be fast.
 
-* XML bias. HTML is the odd one out.
+* XML bias. HTML is the odd one out. Namespaces do not need escaping
+  in selector expressions.
 
 ### Curry
 
@@ -52,18 +53,22 @@ to all selectors).
 
 ##### Both arguments
 
+No curry here.
+
 ```coffee
 zu.children(nodes, selector)
 ```
 
 ##### Binding a selector
 
+Partial application of (string) expression.
+
 ```javascript
 var sel  = zu.children(expr);   // sel is a function operating on node
 var subs = sel(nodes)           // apply sel on nodes to get some children
 ```
 
-##### No selector
+##### No expression
 
 This form may be surprising for functional purists. It's a compromise
 to allow use of the selection functions without a "filtering"
@@ -79,33 +84,104 @@ I.e. `zu.find(nodes)`
 TODO: Argument order is opposite that of Ramda. Do we need a reverse
 argument version of zu? I.e. `var zu = require('zu/reverse');`
 
+
+
 ### Parsing
 
-    parse:     (a) -> domparser.xml a
-    parseHtml: (a) -> domparser.html a
+##### parseXml(str)
+
+Parse an XML string to an array of nodes.
+
+##### parseHtml(str)
+
+Parse an HTML string to an array of nodes. The difference from XML is
+that certain HTML elements get special treatment. `<script>` contents
+are not further parsed, `<img>` tags does not need closing etc.
 
 
-    xml:       (ns) -> domparser.renderXml ns
-    html:      (ns) -> domparser.renderHtml ns
-    text:      (ns) -> domparser.renderText ns
 
-        attr:      (ns, name) -> ns[0]?.attribs?[name]
-        hasClass:  (ns, name) -> return true for n in ns when hasclass(n, name); return false
+### Data out
+
+##### xml(nodes)
+
+Turn given array of nodes into a string XML form.
+
+##### html(nodes)
+
+Turn given array of nodes into a string HTML form.
+
+##### text(nodes)
+
+Turn given array of text nodes into a string, where the
+contents of each node is concatenated together.
+
+##### attr(nodes, name)
+
+Return the attribute value for `names` from the first element in the
+given array of nodes.
+
+##### hasClass(nodes, name)
+
+Test whether any node in the given array of nodes has a `name` as a
+class.
+
+
 
 ### Selectors
 
-        find:      (ns, sel) -> selectors.find     ns, sel
-        closest:   (ns, sel) -> selectors.closest  ns, sel
-        parent:    (ns, sel) -> selectors.parent   ns, sel
-        parents:   (ns, sel) -> selectors.parents  ns, sel
-        next:      (ns, sel) -> selectors.next     ns, sel
-        nextAll:   (ns, sel) -> selectors.nextAll  ns, sel
-        prev:      (ns, sel) -> selectors.prev     ns, sel
-        prevAll:   (ns, sel) -> selectors.prevAll  ns, sel
-        siblings:  (ns, sel) -> selectors.siblings ns, sel
-        children:  (ns, sel) -> selectors.children ns, sel
-        filter:    (ns, sel) -> selectors.filter   ns, sel
-        is:        (ns, sel) -> selectors.is       ns, sel
+##### find(nodes, exp)
+
+* `:: ns, s -> ns`
+* `:: s -> ns -> ns`
+
+Match the given nodes, and any descendants of the given nodes against
+the given expression.
+
+##### children(nodes, exp)
+
+* `:: ns, s -> ns`
+* `:: s -> ns -> ns`
+* `:: ns -> ns`
+
+Match the immediate children of the given nodes against the given
+expression. Also `children(nodes)` to get immediate children without
+any filtering expression.
+
+#####  closest(nodes, exp)
+
+* `:: ns, s -> ns`
+* `:: s -> ns -> ns`
+
+Test the given set of nodes and recursively parent nodes against
+expression and return the first match.
+
+##### filter(nodes, exp)
+
+* `:: ns, s -> ns`
+* `:: s -> ns -> ns`
+* `:: ns -> ns`
+
+Filter the given set of nodes using the expression. Also
+`filter(nodes)` just returns the same nodes (however in a new array).
+
+##### is(nodes, exp)
+
+* `:: ns, s -> bool`
+* `:: s -> ns -> bool`
+* `:: ns -> bool`
+
+Filter the given set of nodes using the expression and tell whether
+any matched.
+
+##### next(nodes, exp)
+##### nextAll(nodes, exp)
+##### parent(nodes, exp)
+##### parents(nodes, exp)
+##### prev(nodes, exp)
+##### prevAll(nodes, exp)
+##### siblings(nodes, exp)
+
+
 
 [1]: https://github.com/cheeriojs/cheerio "Cheerio"
 [2]: https://github.com/algesten/fnuc     "fnuc"

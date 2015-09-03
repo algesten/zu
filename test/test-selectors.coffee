@@ -17,7 +17,7 @@ html = '''
   </div>
 </div>'''
 
-ns = zu.parse html
+ns = zu.parseHtml html
 
 describe 'closest', ->
 
@@ -123,6 +123,11 @@ describe 'filter', ->
     it 'doesnt filter if not selector', ->
         eql zu.filter(zu.children(ns), null), ['<b>', '<span.c>', '<div#b.e.f>']
 
+    it 'creates new array for empty selector', ->
+        nodes = zu.children(ns)
+        nodes2 = zu.filter(nodes)
+        assert.notStrictEqual nodes, nodes2
+
 describe 'is', ->
 
     it 'returns true if any child matches the selector', ->
@@ -131,3 +136,9 @@ describe 'is', ->
 
     it 'returns false if no child matches the selector', ->
         assert.equal zu.is(zu.find(ns,'span'), 'em'), false
+
+    it 'returns true if no expression and given some nodes', ->
+        assert.equal zu.is(zu.find(ns, 'span')), true
+
+    it 'returns false if no expression and given empty array', ->
+        assert.equal zu.is([]), false
