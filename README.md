@@ -78,13 +78,6 @@ selection expression.
 var subs = zu.children(nodes);      // no selector, just get all children
 ```
 
-TODO: Can we make this work for partial application of nodes?
-I.e. `zu.find(nodes)`
-
-TODO: Argument order is opposite that of Ramda. Do we need a reverse
-argument version of zu? I.e. `var zu = require('zu/reverse');`
-
-
 
 ### Parsing
 
