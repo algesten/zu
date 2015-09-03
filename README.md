@@ -83,7 +83,7 @@ var subs = zu.children(nodes);      // no selector, just get all children
 The following selectors are (currently) supported:
 
 * Descendant `div span`
-* Child `div > span`
+* Child `div > span`. Also works as `> span` for immediate children.
 * Class `div.foo`
 * Id `div#bar`
 * Attribute with or without quotes
