@@ -1,9 +1,11 @@
 zu
 ==
 
-> aus außer bei mit nach seit von *zu*
-
 Functional DOM grokking with CSS style selectors
+
+[![Build Status](https://travis-ci.org/algesten/zu.svg)](https://travis-ci.org/algesten/zu)
+
+> aus außer bei mit nach seit von *zu*
 
 Motivation
 ----------
