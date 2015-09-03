@@ -52,9 +52,9 @@ version `zu.[something]With` Example illustrated with `zu.parent`.
 
 ##### Both arguments
 
-No curry here.
-
 `:: ns, s -> ns`
+
+No curry here.
 
 ```javascript
 zu.parent(nodes, exp);
@@ -62,9 +62,9 @@ zu.parent(nodes, exp);
 
 ##### One argument
 
-Equivalent to having `null` as second argument.
-
 `:: ns -> ns`
+
+Equivalent to having `null` as second argument.
 
 ```javascript
 zu.parent(nodes);
@@ -74,6 +74,8 @@ zu.parent(nodes);
 
 `:: ns -> s -> ns`
 
+Provided an array, gives a function expecting the expression.
+
 ```javascript
 zu.parentWith(nodes);
 ```
@@ -81,6 +83,8 @@ zu.parentWith(nodes);
 ##### Partially applied with expression
 
 `:: s -> ns -> ns`
+
+Provided an expression, gives a function expecting an array.
 
 ```javascript
 zu.parentWith(exp);
@@ -91,6 +95,7 @@ zu.parentWith(exp);
 
 The following selectors are (currently) supported:
 
+* Type selector `div`
 * Descendant `div span`
 * Child `div > span`. Also works as `> span` for immediate children.
 * Class `div.foo`
