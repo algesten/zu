@@ -31,5 +31,11 @@ describe 'html', ->
 describe 'text', ->
 
     it 'renders output as text', ->
-        assert.equal zu.text(ns), '\n    1 \n    foo 2\n'
+        assert.equal zu.text(ns), '\n    1 foo 2\n'
         assert.equal zu.text(zu.find(ns, 'span')), 'foo'
+
+    it 'accepts non-arrays', ->
+        assert.equal zu.text(zu.find(ns, 'span')[0]), 'foo'
+
+    it 'accepts undefined', ->
+        assert.equal zu.text(undefined), ''

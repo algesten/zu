@@ -28,11 +28,17 @@ doparse = (s, opts) ->
     parser.end()
     dom
 
-renderText = (nodes, out) -> for n in nodes
-    if n.type == 'tag' and n.children
-        renderText n.children, out
-    else if n.type == 'text'
-        out.push n.data
+onlywhite = do ->
+    re = /^\s+$/
+    (s) -> !!s.match re
+
+renderText = (nodes, out) ->
+    return '' unless nodes
+    for n in nodes when n
+        if n.type == 'tag' and n.children
+            renderText n.children, out
+        else if n.type == 'text'
+            out.push n.data unless onlywhite(n.data)
 
 module.exports =
     xml:  (s) -> doparse s, {xmlMode:true}

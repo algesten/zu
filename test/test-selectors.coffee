@@ -117,6 +117,9 @@ describe 'children', ->
 
 describe 'filter', ->
 
+    it 'accepts non-arrays', ->
+        eql zu.filter(zu.find(ns, 'div')[0],'div'), ['<div#a.a.b>']
+
     it 'filters the nodes by a selector', ->
         eql zu.filter(zu.children(ns),'div'), ['<div#b.e.f>']
 

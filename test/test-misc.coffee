@@ -20,6 +20,9 @@ describe 'attr', ->
     it 'returns undefined if first node is missing the attribute', ->
         assert.equal zu.attr(zu.find(ns,'img'),'class'), undefined
 
+    it 'accepts non arrays', ->
+        assert.equal zu.attr(zu.find(ns,'img')[0],'src'), 'foo1.jpg'
+
 describe 'hasClass', ->
 
     it 'checks whether any of the matched elements has the class', ->
