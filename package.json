@@ -2,7 +2,7 @@
   "name": "zu",
   "version": "0.0.5",
   "main": "lib/zu.js",
-  "description": "Minimal DOM parser + query selector",
+  "description": "Functional DOM grokking with CSS style selectors",
   "repository": {
     "type": "git",
     "url": "github.com/algesten/zu"
@@ -22,5 +22,17 @@
     "chai": "^3.2.0",
     "coffee-script": "^1.9.3",
     "mocha": "^2.2.5"
-  }
+  },
+  "keywords": [
+    "css",
+    "selectors",
+    "dom",
+    "functional programming",
+    "functional",
+    "programming",
+    "curry",
+    "composition",
+    "jquery",
+    "cheerio"
+  ]
 }

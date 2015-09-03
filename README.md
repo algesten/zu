@@ -3,7 +3,7 @@ zu
 
 > aus außer bei mit nach seit von *zu*
 
-Minimal DOM grokking with CSS style selectors
+Functional DOM grokking with CSS style selectors
 
 Motivation
 ----------
