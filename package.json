@@ -1,6 +1,6 @@
 {
   "name": "zu",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main": "lib/zu.js",
   "description": "Minimal DOM parser + query selector",
   "repository": {
