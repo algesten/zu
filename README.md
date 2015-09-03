@@ -174,13 +174,67 @@ Filter the given set of nodes using the expression and tell whether
 any matched.
 
 ##### next(nodes, exp)
+
+* `:: ns, s -> ns`
+* `:: s -> ns -> ns`
+* `:: ns -> ns`
+
+Select immediate sibling nodes to the right of given nodes, optionally
+apply a filter expression.
+
 ##### nextAll(nodes, exp)
+
+* `:: ns, s -> ns`
+* `:: s -> ns -> ns`
+* `:: ns -> ns`
+
+Select all sibling nodes to the right of the given nodes, optionally
+filtered by an expression.
+
 ##### parent(nodes, exp)
+
+* `:: ns, s -> ns`
+* `:: s -> ns -> ns`
+* `:: ns -> ns`
+
+Select immediate parent nodes of given nodes, optionally filtered by
+an expression.
+
 ##### parents(nodes, exp)
+
+* `:: ns, s -> ns`
+* `:: s -> ns -> ns`
+* `:: ns -> ns`
+
+Select all parent nodes of given nodes, optionally filtered by an
+expression.
+
 ##### prev(nodes, exp)
+
+* `:: ns, s -> ns`
+* `:: s -> ns -> ns`
+* `:: ns -> ns`
+
+Select immediate sibling nodes to the left of given nodes, optionally
+apply a filter expression.
+
 ##### prevAll(nodes, exp)
+
+* `:: ns, s -> ns`
+* `:: s -> ns -> ns`
+* `:: ns -> ns`
+
+Select all sibling nodes to the left of the given nodes, optionally
+filtered by an expression.
+
 ##### siblings(nodes, exp)
 
+* `:: ns, s -> ns`
+* `:: s -> ns -> ns`
+* `:: ns -> ns`
+
+Select all siblong nodes both to the left and right, optionally
+filtered by an expression.
 
 
 [1]: https://github.com/cheeriojs/cheerio "Cheerio"
