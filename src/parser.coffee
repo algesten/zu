@@ -31,7 +31,7 @@ string = (parse) ->
     else
         throw new Error "Expected quote or word #{parse.pos()}: #{parse.s}"
 
-sel_attrib = prec(3) (parse, token) ->
+sel_attrib = prec(2) (parse, token) ->
     attr = string(parse).word
     token = parse.peek()
     attrtype = ATTR_TYPES[token.type]? parse

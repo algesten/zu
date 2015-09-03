@@ -33,7 +33,7 @@ evl = (n, ast) ->
     else if ast.type == 'class'
         unless hasclass(n, ast.right.token.word) then false else true and evl(n, ast.right.right)
     else if ast.type == 'attrib'
-        unless evlattr(n, ast) then false else true and evl(ast.right)
+        unless evlattr(n, ast) then false else true and evl(n, ast.right)
 
 depthof = (n) ->
     if n
