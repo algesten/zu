@@ -39,7 +39,7 @@ module.exports =
     find: do ->
         walk = (nodes, fn) ->
             for n in nodes
-                fn n
+                fn n if n.type == 'tag'
                 walk n.children, fn if n.children
             null
         exec walk, I, true
