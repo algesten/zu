@@ -27,18 +27,18 @@ arg1_nodes =
 arg2 =
     attr:      (ns, name) -> (if Array.isArray(ns) then ns[0] else ns)?.attribs?[name]
     hasClass:  (ns, name) -> return true for n in ns when hasclass(n, name); return false
-    find:      (ns, exp) -> selectors.find     ns, exp
-    closest:   (ns, exp) -> selectors.closest  ns, exp
-    parent:    (ns, exp) -> selectors.parent   ns, exp
-    parents:   (ns, exp) -> selectors.parents  ns, exp
-    next:      (ns, exp) -> selectors.next     ns, exp
-    nextAll:   (ns, exp) -> selectors.nextAll  ns, exp
-    prev:      (ns, exp) -> selectors.prev     ns, exp
-    prevAll:   (ns, exp) -> selectors.prevAll  ns, exp
-    siblings:  (ns, exp) -> selectors.siblings ns, exp
-    children:  (ns, exp) -> selectors.children ns, exp
-    filter:    (ns, exp) -> selectors.filter   ns, exp
-    is:        (ns, exp) -> selectors.is       ns, exp
+    find:      selectors.find
+    closest:   selectors.closest
+    parent:    selectors.parent
+    parents:   selectors.parents
+    next:      selectors.next
+    nextAll:   selectors.nextAll
+    prev:      selectors.prev
+    prevAll:   selectors.prevAll
+    siblings:  selectors.siblings
+    children:  selectors.children
+    filter:    selectors.filter
+    is:        selectors.is
 
 
 module.exports = zu = mixin arg1_str, arg1_nodes, withify(arg2)...
