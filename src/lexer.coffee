@@ -5,7 +5,6 @@ SYMBOLS =
     '#': 'hash'
     '>': 'gt'
     ',': 'comma'
-    ':': 'colon'
     '[': 'opbrack'
     ']': 'clbrack'
     '(': 'opparen'
@@ -17,6 +16,7 @@ SYMBOLS =
     '$': 'dollar'
     '*': 'asterisk'
     '"': 'quote'
+#    ':': 'colon'
 
 # whitespace is sp
 ws = " "

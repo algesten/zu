@@ -31,3 +31,14 @@ describe 'hasClass', ->
 
     it 'returns false if none has the class', ->
         assert.equal zu.hasClass(zu.find(ns,'img'),'nosuchclass'), false
+
+describe 'namespaces', ->
+
+    xml = '<c:foo>qwe<b:bar>panda</b:bar></c:foo>'
+    ns2 = zu.parseXml xml
+
+    it 'just parses as regular nodes', ->
+        eql zu.find(ns2, 'b:bar'), ['<b:bar>']
+
+    it 'serializes normally', ->
+        assert.equal zu.xml(ns2), '<c:foo>qwe<b:bar>panda</b:bar></c:foo>'
