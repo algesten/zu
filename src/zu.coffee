@@ -1,6 +1,5 @@
 {zipwith, set, mixin, keys, values, converge, map, apply} = require 'fnuc'
 domparser = require './domparser'
-selectors = require './selectors'
 hasclass  = require './hasclass'
 
 # fn can be partially applied either with an array or an expression.
@@ -24,21 +23,10 @@ arg1_nodes =
     html:      (ns) -> domparser.renderHtml ns
     text:      (ns) -> domparser.renderText ns
 
-arg2 =
+arg2 = mixin {
     attr:      (ns, name) -> (if Array.isArray(ns) then ns[0] else ns)?.attribs?[name]
     hasClass:  (ns, name) -> return true for n in ns when hasclass(n, name); return false
-    find:      selectors.find
-    closest:   selectors.closest
-    parent:    selectors.parent
-    parents:   selectors.parents
-    next:      selectors.next
-    nextAll:   selectors.nextAll
-    prev:      selectors.prev
-    prevAll:   selectors.prevAll
-    siblings:  selectors.siblings
-    children:  selectors.children
-    filter:    selectors.filter
-    is:        selectors.is
+    }, require './selectors'
 
 
 module.exports = zu = mixin arg1_str, arg1_nodes, withify(arg2)...
