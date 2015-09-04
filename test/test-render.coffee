@@ -19,6 +19,14 @@ describe 'xml', ->
     it 'works for subtree', ->
         assert.equal zu.xml(zu.find(ns,'img')), '<img src="foo.jpg"/>'
 
+    it 'works for comments', ->
+        xml = "<foo> <!-- This: is a title -->  </foo>"
+        ns2 = zu.parseXml xml
+        assert.equal zu.xml(ns2), '<foo> <!-- This: is a title -->  </foo>'
+
+    it 'is ok with null', ->
+        assert.equal zu.xml(null), ''
+
 describe 'html', ->
 
     it 'renders output as html', ->
@@ -27,6 +35,9 @@ describe 'html', ->
 
     it 'works for subtree', ->
         assert.equal zu.html(zu.find(ns, 'img')), '<img src="foo.jpg">'
+
+    it 'is ok with null', ->
+        assert.equal zu.html(null), ''
 
 describe 'text', ->
 

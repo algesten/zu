@@ -8,7 +8,11 @@ arg2 = (a1, a2) -> a2
 
 # wrap the first argument to fn in an array, if it isn't an array.
 arrfirst = (fn) -> (as...) ->
-    as[0] = [v] unless Array.isArray v = as[0]
+    v = as[0]
+    if v == undefined or v == null
+        as[0] = []
+    else unless Array.isArray v
+        as[0] = [v]
     fn as...
 
 # fn can be partially applied either with an array or an expression.
