@@ -33,7 +33,6 @@ onlywhite = do ->
     (s) -> !!s.match re
 
 renderText = (nodes, out) ->
-    return '' unless nodes
     for n in nodes when n
         if n.type == 'tag' and n.children
             renderText n.children, out
@@ -43,6 +42,15 @@ renderText = (nodes, out) ->
 module.exports =
     xml:  (s) -> doparse s, {xmlMode:true}
     html: (s) -> doparse s
-    renderXml:  (dom) -> serialize dom, xmlMode:true
-    renderHtml: (dom) -> serialize dom
-    renderText: (dom) -> renderText dom, (out = []); out.join('')
+    renderXml:  (dom) ->
+        return '' unless dom
+        dom = if Array.isArray(dom) then dom else [dom]
+        serialize dom, xmlMode:true
+    renderHtml: (dom) ->
+        return '' unless dom
+        dom = if Array.isArray(dom) then dom else [dom]
+        serialize dom
+    renderText: (dom) ->
+        return '' unless dom
+        dom = if Array.isArray(dom) then dom else [dom]
+        renderText dom, (out = []); out.join('')

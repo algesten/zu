@@ -15,7 +15,7 @@
   "license": "MIT",
   "dependencies": {
     "dom-serializer": "^0.1.0",
-    "fnuc": "0.0.19",
+    "fnuc": "0.0.23",
     "htmlparser2": "^3.8.3"
   },
   "devDependencies": {

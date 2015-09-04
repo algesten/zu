@@ -1,7 +1,8 @@
 {I, uniq}  = require 'fnuc'
-matcher = require './matcher'
-parser  = require './parser'
-{evl}   = matcher
+matcher    = require './matcher'
+parser     = require './parser'
+{evl}      = matcher
+ensurearr  = require './ensurearr'
 
 # when collecting nodes we do tests against the lowest
 # level in a selector expressions. this forms a starting
@@ -15,9 +16,11 @@ collector = (ast) ->
 
 parse = (exp) -> parser(exp)()
 
-exec = (walk, pre, emptyast) -> (roots, exp) ->
+exec = (walk, pre, emptyast) -> (exp, roots) ->
     ast = parse exp
     return [] if emptyast and !ast
+    return roots unless roots
+    roots = if Array.isArray(roots) then roots else [roots]
     {nodes, coll} = collector ast
     walk roots, coll
     matcher roots, pre(nodes), ast
@@ -128,4 +131,4 @@ module.exports =
             fn n for n in nodes
         exec walk, I
 
-    is: (roots, exp) -> !!@filter(roots, exp).length
+    is: (exp, roots) -> !!@filter(roots, exp).length
