@@ -18,6 +18,8 @@ parse = (exp) -> parser(exp)()
 exec = (walk, pre, emptyast) -> (roots, exp) ->
     ast = parse exp
     return [] if emptyast and !ast
+    return roots unless roots
+    roots = if Array.isArray(roots) then roots else [roots]
     {nodes, coll} = collector ast
     walk roots, coll
     matcher roots, pre(nodes), ast
