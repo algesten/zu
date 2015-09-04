@@ -1,4 +1,4 @@
-{I, uniq}  = require 'fnuc'
+{uniq}  = require 'fnuc'
 matcher = require './matcher'
 parser  = require './parser'
 {evl}   = matcher
@@ -6,23 +6,29 @@ parser  = require './parser'
 # when collecting nodes we do tests against the lowest
 # level in a selector expressions. this forms a starting
 # point for executing the entire ast using the matcher.
-collector = (ast) ->
-    nodes = []
+collector = (ast, nodes) ->
     # ast.deep means a child/descend expression
     lst = if ast?.deep then ast.right else ast
-    coll = (n) -> nodes.push n if evl(n, lst)
-    {nodes, coll}
+    (n) -> nodes[nodes.length] = n if evl(n, lst)
 
 parse = (exp) -> parser(exp)()
 
 exec = (walk, pre, emptyast) -> (roots, exp) ->
     ast = parse exp
     return [] if emptyast and !ast
+    # no nodes? you get what you give.
     return roots unless roots
+    # we allow passing in nodes not in arrays
     roots = if Array.isArray(roots) then roots else [roots]
-    {nodes, coll} = collector ast
+    # collection of nodes that are starting points for
+    # matching the entire ast
+    nodes = []
+    # collector function that matches the rightmost part
+    # of the ast and adds it to nodes if we have a match
+    coll = collector ast, nodes
     walk roots, coll
-    matcher roots, pre(nodes), ast
+    # run entire ast match on starting points
+    matcher roots, (if pre then pre(nodes) else nodes), ast
 
 tagnext = (n) ->
     loop
@@ -40,11 +46,11 @@ module.exports =
 
     find: do ->
         walk = (nodes, fn) ->
-            for n in nodes
-                fn n if n.type == 'tag'
+            for n in nodes when n.type == 'tag'
+                fn n
                 walk n.children, fn if n.children
             null
-        exec walk, I, true
+        exec walk, null, true
 
     closest: do ->
         up = (n, fn) ->
@@ -76,58 +82,50 @@ module.exports =
         right = (nodes, fn) ->
             fn p for n in nodes when p = tagnext(n)
             null
-        exec right, I
+        exec right, null
 
     nextAll: do ->
-        right = (n, fn) ->
-            ret = fn n if n.type == 'tag'
-            right(n.next, fn) if n.next
-            null
+        right = (n, fn) -> if p = tagnext(n)
+            fn p; right p, fn
         walkright = (nodes, fn) ->
-            right(n.next, fn) for n in nodes when n.next
+            right(n, fn) for n in nodes
             null
-        exec walkright, I
+        exec walkright, null
 
     prev: do ->
         left = (nodes, fn) ->
             fn p for n in nodes when p = tagprev(n)
             null
-        exec left, I
+        exec left, null
 
     prevAll: do ->
-        left = (n, fn) ->
-            ret = fn n if n.type == 'tag'
-            left(n.prev, fn) if n.prev
-            null
+        left  = (n, fn) -> if p = tagprev(n)
+            fn p; left p, fn
         walkleft = (nodes, fn) ->
-            left(n.prev, fn) for n in nodes when n.prev
+            left(n, fn) for n in nodes
             null
-        exec walkleft, I
+        exec walkleft, null
 
     siblings: do ->
-        left  = (n, fn) ->
-            if p = tagprev(n)
-                fn p
-                left p
-        right = (n, fn) ->
-            if p = tagnext(n)
-                fn p
-                right p
+        left  = (n, fn) -> if p = tagprev(n)
+            fn p; left p, fn
+        right = (n, fn) -> if p = tagnext(n)
+            fn p; right p, fn
         walk = (nodes, fn) ->
             for n in nodes
                 left n, fn
                 right n, fn
             null
-        exec walk, I
+        exec walk, null
 
     children: do ->
         down = (nodes, fn) -> for n in nodes when n.children
             fn cn for cn in n.children when cn.type == 'tag'
-        exec down, I
+        exec down, null
 
     filter: do ->
         walk = (nodes, fn) ->
-            fn n for n in nodes
-        exec walk, I
+            fn n for n in nodes when n.type == 'tag'
+        exec walk, null
 
     is: (roots, exp) -> !!@filter(roots, exp).length

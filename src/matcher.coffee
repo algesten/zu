@@ -36,10 +36,8 @@ evl = (n, ast) ->
         unless evlattr(n, ast)          then false else evl(n, ast.right)
 
 depthof = (n) ->
-    if n
-        if n._depth then n._depth else n._depth = 1 + depthof(n.parent)
-    else
-        0
+    if n._depth then n._depth else
+        if n.parent then n._depth = 1 + depthof(n.parent) else n._depth = 0
 
 # max depth of the list of nodes or 0
 maxdepth = (nodes) -> nodes.reduce (d, n) ->
@@ -52,29 +50,31 @@ maxdepth = (nodes) -> nodes.reduce (d, n) ->
 #            /   \
 #           i    span.d
 
-matchupdomlvl = (nodes, ast, depth) -> for n, i in nodes when depth < 0 or depth == depthof(n)
-    continue unless n
-    # run match if not already done
-    n._match = evl n, ast unless typeof n._match == 'boolean'
-    unless n._match
-        if depth >= 0
-            # move to parent for next round of lvl matching
-            nodes[i] = n.parent
-        else
-            # discard for immediate
-            nodes[i] = null
-
+matchupdomlvl = (nodes, ast, depth) ->
+    for n, i in nodes when n and (depth == -1 or depth == (n._depth ? depthof(n)))
+        # run match if not already done
+        n._match = evl n, ast unless n._match?
+        unless n._match
+            if depth >= 0
+                # move to parent for next round of lvl matching which
+                # may move to undefined, if at top. this is fine.
+                nodes[i] = n.parent
+            else
+                # discard for immediate
+                nodes[i] = null
     null
 
 # remove _match flag from node and all parents
 unmatchflag = (n) ->
-    return unless n
-    delete n._match
-    unmatchflag n.parent
+    loop
+        delete n._match
+        n = n.parent
+        break unless n
+    null
 
 matchupdom = (nodes, ast, immediate) ->
     # delete any match flags
-    nodes.forEach unmatchflag
+    unmatchflag(n) for n in nodes
     if immediate
         # immediate descendant
         matchupdomlvl nodes, ast, -1
@@ -102,13 +102,14 @@ matchupdom = (nodes, ast, immediate) ->
 
 matchupast = (roots, parents, ast) ->
     ischild = ast.type == 'child'
+    isleftdeep = ast.left.deep
     if ast.left
         # the ast to check parents against
-        parentast = if ast.left.deep then ast.left.right else ast.left
+        parentast = if isleftdeep then ast.left.right else ast.left
         # check dom nodes for this ast level
         matchupdom parents, parentast, ischild
         # continue up? the ast (if there is a continuation)
-        if ast.left.deep
+        if isleftdeep
             upparent parents # move parents up
             matchupast roots, parents, ast.left
     else
@@ -119,14 +120,16 @@ matchupast = (roots, parents, ast) ->
     null
 
 
-upparent = (nodes) -> nodes[i] = n?.parent for n, i in nodes
+upparent = (nodes) ->
+    nodes[i] = n.parent for n, i in nodes when n
+    null
 
 # the matcher expects to be given nodes that are already selected
-# against the lowest level (right most) level in the ast. it
-# will only check parent nodes working up the ast tree.
+# against the lowest level (rightmost) level in the ast. it will only
+# check parent nodes working up the ast tree.
 module.exports = matcher = (roots, nodes, ast) ->
 
-    # no expression? just return start nodes
+    # no deep expression? just return start nodes
     return nodes unless ast?.deep
 
     # parents array will be modified to hold nodes that are kept.
@@ -134,10 +137,7 @@ module.exports = matcher = (roots, nodes, ast) ->
     matchupast roots, parents, ast
 
     # keep nodes for parents that passed matching
-    nodes.reduce (coll, n, i) ->
-        coll.push n if parents[i]
-        coll
-    , []
+    nodes.filter (n, i) -> parents[i]
 
 # expose evl
 matcher.evl = evl
