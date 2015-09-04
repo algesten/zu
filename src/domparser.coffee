@@ -40,17 +40,17 @@ renderText = (nodes, out) ->
             out.push n.data unless onlywhite(n.data)
 
 module.exports =
-    xml:  (s) -> doparse s, {xmlMode:true}
-    html: (s) -> doparse s
-    renderXml:  (dom) ->
+    parseXml:  (s) -> doparse s, {xmlMode:true}
+    parseHtml: (s) -> doparse s
+    xml:  (dom) ->
         return '' unless dom
         dom = if Array.isArray(dom) then dom else [dom]
         serialize dom, xmlMode:true
-    renderHtml: (dom) ->
+    html: (dom) ->
         return '' unless dom
         dom = if Array.isArray(dom) then dom else [dom]
         serialize dom
-    renderText: (dom) ->
+    text: (dom) ->
         return '' unless dom
         dom = if Array.isArray(dom) then dom else [dom]
         renderText dom, (out = []); out.join('')

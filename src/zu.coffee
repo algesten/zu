@@ -1,5 +1,4 @@
 {zipwith, set, mixin, keys, values, converge, map, apply} = require 'fnuc'
-domparser = require './domparser'
 hasclass  = require './hasclass'
 
 # fn can be partially applied either with an array or an expression.
@@ -14,14 +13,7 @@ withify = do ->
     z = (k, fn) -> set(withk(k), withcurry(fn)) set({}, k, fn)
     converge zipwith(z), keys, values
 
-arg1_str =
-    parseXml:  (a) -> domparser.xml a
-    parseHtml: (a) -> domparser.html a
-
-arg1_nodes =
-    xml:       (ns) -> domparser.renderXml ns
-    html:      (ns) -> domparser.renderHtml ns
-    text:      (ns) -> domparser.renderText ns
+arg1 = require './domparser'
 
 arg2 = mixin {
     attr:      (ns, name) -> (if Array.isArray(ns) then ns[0] else ns)?.attribs?[name]
@@ -29,4 +21,4 @@ arg2 = mixin {
     }, require './selectors'
 
 
-module.exports = zu = mixin arg1_str, arg1_nodes, withify(arg2)...
+module.exports = zu = mixin arg1, withify(arg2)...
