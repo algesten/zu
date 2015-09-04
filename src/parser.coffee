@@ -2,9 +2,6 @@
 lexer = require './lexer'
 spc = split ' '
 
-prec   = (pr) -> (fn) -> fn.pr = pr; fn
-precof = (fn) -> fn?.pr ? 0
-
 # get a quoted or unquoted string
 string = (parse) ->
     token = parse.peek()
@@ -20,30 +17,34 @@ string = (parse) ->
     else
         throw new Error "Expected quote or word #{parse.pos()}: #{parse.s}"
 
-continueright = (parse, token, npr) ->
+continueright = (parse, token) ->
     ntoken = parse.peek()
     prx = PREFIX2[ntoken?.type]
-    if npr < precof(prx)
+    if prx
         parse.consume()
         prx parse, ntoken
 
-tagexp = (type, pr, npr) -> prec(pr) (parse, token) ->
-    right = continueright parse, token, npr
-    mixin {type, token, right}
+tagexp = (type) -> (parse, token) ->
+    word = parse.expect('word').word
+    right = continueright parse, token
+    mixin {type, token, word, right}
 
-sel_id     = tagexp 'id',     3, 1
-sel_class  = tagexp 'class',  3, 1
-sel_pseudo = tagexp 'pseudo', 3, 1
-sel_word   = tagexp 'word',   2, 2
+sel_id     = tagexp 'id'
+sel_class  = tagexp 'class'
+sel_pseudo = tagexp 'pseudo'
+sel_word   = (parse, token) ->
+    right = continueright parse, token
+    mixin {type:'word', token, right}
 
-sel_attrib = prec(4) (parse, token) ->
+
+sel_attrib = (parse, token) ->
     attr = string(parse).word
     token = parse.peek()
     attrtype = ATTR_TYPES[token.type]? parse
     throw new Error "Parse failed at col #{parse.pos()}: #{parse.s}" unless attrtype
     attrval = if attrtype == 'exists' then null else string(parse).word
     parse.expect('clbrack')
-    right = continueright parse, token, 3
+    right = continueright parse, token
     {type:'attrib', token, attrtype, attr, attrval, right}
 
 ATTR_TYPES = do ->
@@ -65,12 +66,12 @@ PREFIX =
 PREFIX2 = mixin PREFIX,
     opbrack: sel_attrib
 
-infixop  = (type, pr) -> prec(pr) (parse, token, left) ->
-    {type, token, left, right:parse(pr), deep:true}
+infixop  = (type) -> (parse, token, left) ->
+    {type, token, left, right:parse(false), deep:true}
 
 INFIX =
-    gt:    infixop 'child',   4
-    space: infixop 'descend', 4
+    gt:    infixop 'child'
+    space: infixop 'descend'
 
 parser = (s) ->
 
@@ -82,32 +83,30 @@ parser = (s) ->
     {peek, consume, expect, pos} = lex
 
     # infix operator parsing
-    parseInfix = (pr, left, skipsp) ->
+    parseInfix = (left, skipsp) ->
 
         # peek at next token
         token = peek(skipsp)
 
-        # infix/precedence for peek token
+        # infix for peek token
         ifx = INFIX[token?.type]
-        ifxpr = precof ifx
 
         # no infix operator for next token
         unless ifx
             # did we skip space and there was a token?
             if skipsp and token
-                return parseInfix pr, left, false
+                # then we consider the space a token, redo
+                # the parseInfi and do not skip space.
+                return parseInfix left, false
             else
-               return left
-
-        # maybe make it the new left expression
-        if pr < ifxpr
-            consume(skipsp) # actually consume it
-            parseInfix pr, ifx(parse, token, left), true
+                return left
         else
-            left
+            # this is the new left expression
+            consume(skipsp) # actually consume it
+            parseInfix ifx(parse, token, left), true
 
-    # parser function with precedence
-    parse = (pr = 0) ->
+    # parser function
+    parse = (doinfix = true) ->
 
         # next token
         token = peek(true)
@@ -130,8 +129,11 @@ parser = (s) ->
         # left expression
         left = prx parse, token if token
 
-        # may return infix expression or left
-        parseInfix pr, left, true
+        if doinfix
+            # may return infix expression or left
+            parseInfix left, true
+        else
+            left
 
 
     # expose lexer functions

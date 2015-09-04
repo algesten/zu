@@ -27,13 +27,13 @@ evl = (n, ast) ->
     if !ast
         return true
     else if ast.type == 'word'
-        unless n.name == ast.token.word then false else true and evl(n, ast.right)
+        unless n.name == ast.token.word then false else evl(n, ast.right)
     else if ast.type == 'id'
-        unless isId(n, ast.right.token.word) then false else true and evl(n, ast.right.right)
+        unless isId(n, ast.word)        then false else evl(n, ast.right)
     else if ast.type == 'class'
-        unless hasclass(n, ast.right.token.word) then false else true and evl(n, ast.right.right)
+        unless hasclass(n, ast.word)    then false else evl(n, ast.right)
     else if ast.type == 'attrib'
-        unless evlattr(n, ast) then false else true and evl(n, ast.right)
+        unless evlattr(n, ast)          then false else evl(n, ast.right)
 
 depthof = (n) ->
     if n
@@ -103,6 +103,7 @@ matchupdom = (nodes, ast, immediate) ->
 matchupast = (roots, parents, ast) ->
     ischild = ast.type == 'child'
     if ast.left
+        # the ast to check parents against
         parentast = if ast.left.deep then ast.left.right else ast.left
         # check dom nodes for this ast level
         matchupdom parents, parentast, ischild
