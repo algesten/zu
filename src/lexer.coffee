@@ -16,7 +16,7 @@ SYMBOLS =
     '$': 'dollar'
     '*': 'asterisk'
     '"': 'quote'
-#    ':': 'colon'
+    ':': 'colon'
 
 # whitespace is sp
 ws = " "
@@ -50,7 +50,7 @@ lexer = (s) ->
     pos = 0
 
     # peek at next token
-    peek = (skipsp) -> tok pos, skipsp
+    peek = (skipsp, offs=0) -> tok (pos + offs), skipsp
 
     # consume next token (move position forward)
     consume = (skipsp) ->

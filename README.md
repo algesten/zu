@@ -111,6 +111,11 @@ The following selectors are (currently) supported:
   - starts with `div[foo^=bar]`
   - ends with `div[foo$=bar]`
   - substring `div[foo*=bar]`
+* Pseudo-classes
+  - contains specified text `:contains()`
+  - that have no children `:empty`
+  - first child of parent `:first-child`
+  - last child of parent `:last-child`
 
 ## API
 

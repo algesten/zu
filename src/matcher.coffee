@@ -1,9 +1,11 @@
-{map}  = require 'fnuc'
-filter = require './filter'
-escre    = require './escre'
-hasclass = require './hasclass'
+{map, firstfn} = require 'fnuc'
+filter    = require './filter'
+escre     = require './escre'
+hasclass  = require './hasclass'
+domparser = require './domparser'
 
 isId = (n, id) -> n.attribs?.id == id
+onlytag = (as) -> filter as, (n) -> n.type == 'tag'
 
 # evaluate attribute selector
 evlattr = (n, ast) ->
@@ -25,6 +27,22 @@ evlattr = (n, ast) ->
     else
         false
 
+# evaluate pseudo selector
+evlpseudo = (n, ast) ->
+    if ast.pseudotype == 'contains'
+        domparser.text(n).indexOf(ast.pseudoval) >= 0
+    else if ast.pseudotype == 'empty'
+        !n?.children?.length or !firstfn n.children, (c) -> c.type == 'tag' or c.type == 'text'
+    else if ast.pseudotype == 'first-child'
+        if cn = n.parent?.children
+            onlytag(cn).indexOf(n) == 0
+    else if ast.pseudotype == 'last-child'
+        if cn = n.parent?.children
+            tgs = onlytag(cn)
+            tgs.indexOf(n) == tgs.length - 1
+    else
+        false
+
 evl = (n, ast) ->
     while ast
         if ast.type == 'word'
@@ -35,10 +53,12 @@ evl = (n, ast) ->
             return false unless hasclass(n, ast.word)
         else if ast.type == 'attrib'
             return false unless evlattr(n, ast)
+        else if ast.type == 'pseudo'
+            return false unless evlpseudo(n, ast)
         else if ast.type == 'all'
             # well. it's always good.
         else
-            throw new Error("Unhandled ast type")
+            throw new Error("Unhandled ast type " + ast.type)
         ast = ast.right
     true
 

@@ -31,9 +31,16 @@ tagexp = (type) -> (parse, token) ->
 
 sel_id     = tagexp 'id'
 sel_class  = tagexp 'class'
-sel_pseudo = tagexp 'pseudo'
 sel_word   = (parse, token) ->
-    right = continueright parse, token
+    ntoken = parse.peek()
+    if ntoken?.type == 'colon'
+        # we must check whether the next token is a known pseudo-class
+        ntoken2 = parse.peek(false, ntoken.len)
+        if ntoken2?.type == 'word' and not PSEUDO[ntoken2.word]
+            parse.consume(); parse.consume()
+            token.word = token.word + ":" + ntoken2.word
+            token.len = token.word.length
+    right = continueright parse
     mixin {type:'word', token, right}
 sel_all    = (parse, token) ->
     right = continueright parse
@@ -58,6 +65,25 @@ ATTR_TYPES = do ->
     caret:    symb2 'begin'
     dollar:   symb2 'end'
     asterisk: symb2 'substr'
+
+sel_pseudo = (parse, token) ->
+    ntoken = parse.consume()
+    pseudotype = ntoken.word
+    pfn = PSEUDO[pseudotype]
+    throw new Error "Parse failed at col #{parse.pos()}: #{parse.s}" unless pfn
+    pseudoval = pfn(parse)
+    right = continueright parse
+    {type:'pseudo', token, pseudotype, pseudoval, right}
+
+PSEUDO =
+    'contains': (parse) ->
+        parse.expect('opparen')
+        val = string(parse).word
+        parse.expect('clparen')
+        val
+    'empty':       ->
+    'first-child': ->
+    'last-child':  ->
 
 PREFIX =
     hash:     sel_id
