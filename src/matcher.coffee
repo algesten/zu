@@ -1,3 +1,4 @@
+{map, filter} = require 'fnuc'
 escre    = require './escre'
 hasclass = require './hasclass'
 
@@ -135,11 +136,11 @@ module.exports = matcher = (roots, nodes, ast) ->
     return nodes unless ast?.deep
 
     # parents array will be modified to hold nodes that are kept.
-    parents = nodes.map (n) -> n.parent
+    parents = map nodes, (n) -> n.parent
     matchupast roots, parents, ast
 
     # keep nodes for parents that passed matching
-    nodes.filter (n, i) -> parents[i]
+    filter nodes, (n, i) -> parents[i]
 
 # expose evl
 matcher.evl = evl
