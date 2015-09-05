@@ -9,13 +9,13 @@
   },
   "scripts": {
     "test": "mocha",
-    "prepublish": "coffee -m -c -o lib src"
+    "prepublish": "rm -rf lib && coffee -m -c -o lib src"
   },
   "author": "Martin Algesten",
   "license": "MIT",
   "dependencies": {
     "dom-serializer": "^0.1.0",
-    "fnuc": "0.0.24",
+    "fnuc": "^1.0.0",
     "htmlparser2": "^3.8.3"
   },
   "devDependencies": {
