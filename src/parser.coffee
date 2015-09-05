@@ -17,16 +17,16 @@ string = (parse) ->
     else
         throw new Error "Expected quote or word #{parse.pos()}: #{parse.s}"
 
-continueright = (parse, token) ->
-    ntoken = parse.peek()
-    prx = PREFIX2[ntoken?.type]
+continueright = (parse) ->
+    token = parse.peek()
+    prx = PREFIX2[token?.type]
     if prx
         parse.consume()
-        prx parse, ntoken
+        prx parse, token
 
 tagexp = (type) -> (parse, token) ->
     word = parse.expect('word').word
-    right = continueright parse, token
+    right = continueright parse
     mixin {type, token, word, right}
 
 sel_id     = tagexp 'id'
@@ -36,17 +36,17 @@ sel_word   = (parse, token) ->
     right = continueright parse, token
     mixin {type:'word', token, right}
 sel_all    = (parse, token) ->
-    mixin {type:'all', token}
-
+    right = continueright parse
+    mixin {type:'all', token, right}
 
 sel_attrib = (parse, token) ->
     attr = string(parse).word
-    token = parse.peek()
-    attrtype = ATTR_TYPES[token.type]? parse
+    ntoken = parse.peek()
+    attrtype = ATTR_TYPES[ntoken.type]? parse
     throw new Error "Parse failed at col #{parse.pos()}: #{parse.s}" unless attrtype
     attrval = if attrtype == 'exists' then null else string(parse).word
     parse.expect('clbrack')
-    right = continueright parse, token
+    right = continueright parse
     {type:'attrib', token, attrtype, attr, attrval, right}
 
 ATTR_TYPES = do ->
