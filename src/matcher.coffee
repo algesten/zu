@@ -35,6 +35,8 @@ evl = (n, ast) ->
             return false unless hasclass(n, ast.word)
         else if ast.type == 'attrib'
             return false unless evlattr(n, ast)
+        else if ast.type == 'all'
+            # well. it's always good.
         else
             throw new Error("Unhandled ast type")
         ast = ast.right

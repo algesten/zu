@@ -45,7 +45,7 @@ var subs  = zu.find(nodes, 'div#a > span.b');
 * Performance. Especially matching should be fast.
 
 * XML bias. HTML is the odd one out. Namespaces do not need escaping
-  in selector expressions.
+  in selector expressions (`zu.find nodes, 'e:event'`).
 
 ### Curry
 
@@ -98,11 +98,12 @@ zu.parentWith(exp);
 The following selectors are (currently) supported:
 
 * Type selector `div`
+* All selector `*`
 * Descendant `div span`
 * Child `div > span`. Also works as `> span` for immediate children.
 * Class `div.foo`
 * Id `div#bar`
-* Attribute with or without quotes
+* Attributes with or without quotes
   - exists `div[foo]`
   - equals `div[foo=bar]`
   - whitespace separated match `div[foo~=bar]`

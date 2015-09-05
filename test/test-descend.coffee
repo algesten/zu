@@ -80,3 +80,30 @@ describe 'descend', ->
             </div>'
             ns2 = zu.parseXml xml
             eql zu.find(ns2, '.a .a span'), ['<span.s2>']
+
+    describe 'select all', ->
+
+        it 'selects all', ->
+            eql zu.find(ns, '*'), [
+                '<div#a.a.b>'
+                '<b>'
+                '<span.c>'
+                '<i>'
+                '<span.d>'
+                '<div#b.e.f>'
+                '<span.g>'
+                '<i>'
+                '<span.h>'
+                '<em>' ]
+
+        it 'selects all that is a descendant of something', ->
+            eql zu.find(ns, '* *'), [
+                '<b>'
+                '<span.c>'
+                '<i>'
+                '<span.d>'
+                '<div#b.e.f>'
+                '<span.g>'
+                '<i>'
+                '<span.h>'
+                '<em>' ]

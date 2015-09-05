@@ -35,6 +35,8 @@ sel_pseudo = tagexp 'pseudo'
 sel_word   = (parse, token) ->
     right = continueright parse, token
     mixin {type:'word', token, right}
+sel_all    = (parse, token) ->
+    mixin {type:'all', token}
 
 
 sel_attrib = (parse, token) ->
@@ -58,13 +60,16 @@ ATTR_TYPES = do ->
     asterisk: symb2 'substr'
 
 PREFIX =
-    hash:  sel_id
-    dot:   sel_class
-    colon: sel_pseudo
-    word:  sel_word
+    hash:     sel_id
+    dot:      sel_class
+    word:     sel_word
+    asterisk: sel_all
 
-PREFIX2 = mixin PREFIX,
-    opbrack: sel_attrib
+PREFIX2 =
+    hash:     sel_id
+    dot:      sel_class
+    colon:    sel_pseudo
+    opbrack:  sel_attrib
 
 infixop  = (type) -> (parse, token, left) ->
     {type, token, left, right:parse(false), deep:true}
