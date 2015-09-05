@@ -20,6 +20,21 @@ ns = zu.parseHtml html
 
 describe 'descend', ->
 
+    describe '_desc', ->
+
+        it 'exists on every node level', ->
+            eql ns[0]._desc, [
+                '<div#a.a.b>'
+                '<b>'
+                '<span.c>'
+                '<i>'
+                '<span.d>'
+                '<div#b.e.f>'
+                '<span.g>'
+                '<i>'
+                '<span.h>'
+                '<em>' ]
+
     describe 'single', ->
 
         it 'selects none', ->
