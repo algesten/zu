@@ -40,6 +40,9 @@ describe 'descend', ->
         it 'selects none', ->
             eql zu.find(ns, 'div p'), []
 
+        it 'selects without array', ->
+            eql zu.find(ns[0], 'div#a'), ['<div#a.a.b>']
+
         it 'selects one level down', ->
             eql zu.find(ns, 'div b'), ['<b>']
 

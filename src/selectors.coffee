@@ -50,6 +50,8 @@ module.exports =
             ast = parse exp
             return [] unless ast
             return roots unless roots
+            # we allow passing in nodes not in arrays
+            roots = if Array.isArray(roots) then roots else [roots]
             # ast.deep means a child/descend expression
             lst = if ast?.deep then ast.right else ast
             nodes = []
