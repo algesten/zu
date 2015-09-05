@@ -26,16 +26,19 @@ evlattr = (n, ast) ->
         false
 
 evl = (n, ast) ->
-    if !ast
-        return true
-    else if ast.type == 'word'
-        unless n.name == ast.token.word then false else evl(n, ast.right)
-    else if ast.type == 'id'
-        unless isId(n, ast.word)        then false else evl(n, ast.right)
-    else if ast.type == 'class'
-        unless hasclass(n, ast.word)    then false else evl(n, ast.right)
-    else if ast.type == 'attrib'
-        unless evlattr(n, ast)          then false else evl(n, ast.right)
+    while ast
+        if ast.type == 'word'
+            return false unless n.name == ast.token.word
+        else if ast.type == 'id'
+            return false unless isId(n, ast.word)
+        else if ast.type == 'class'
+            return false unless hasclass(n, ast.word)
+        else if ast.type == 'attrib'
+            return false unless evlattr(n, ast)
+        else
+            throw new Error("Unhandled ast type")
+        ast = ast.right
+    true
 
 depthof = (n) ->
     if n._depth then n._depth else
