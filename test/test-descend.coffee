@@ -49,3 +49,16 @@ describe 'descend', ->
 
         it 'selects', ->
             eql zu.find(ns, 'div#a span.g em'), ['<em>']
+
+    describe 'same selector many levels', ->
+
+        it 'selects correct', ->
+            xml = '
+            <div class="a">
+                <span class="s1"></span>
+                <div class="a">
+                    <span class="s2"></span>
+                </div>
+            </div>'
+            ns2 = zu.parseXml xml
+            eql zu.find(ns2, '.a .a span'), ['<span.s2>']
