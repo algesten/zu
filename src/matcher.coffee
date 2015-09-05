@@ -1,4 +1,5 @@
-{map, filter} = require 'fnuc'
+{map}  = require 'fnuc'
+filter = require './filter'
 escre    = require './escre'
 hasclass = require './hasclass'
 
