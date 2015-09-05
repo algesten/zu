@@ -40,9 +40,11 @@ depthof = (n) ->
         if n.parent then n._depth = 1 + depthof(n.parent) else n._depth = 0
 
 # max depth of the list of nodes or 0
-maxdepth = (nodes) -> nodes.reduce (d, n) ->
-    Math.max d, depthof(n)
-, 0
+maxdepth = (nodes) ->
+    max = 0
+    for n in nodes when n
+        max = Math.max max, depthof(n)
+    max
 
 #         div
 #        /   \
@@ -74,7 +76,7 @@ unmatchflag = (n) ->
 
 matchupdom = (nodes, ast, immediate) ->
     # delete any match flags
-    unmatchflag(n) for n in nodes
+    unmatchflag(n) for n in nodes when n
     if immediate
         # immediate descendant
         matchupdomlvl nodes, ast, -1
@@ -102,8 +104,8 @@ matchupdom = (nodes, ast, immediate) ->
 
 matchupast = (roots, parents, ast) ->
     ischild = ast.type == 'child'
-    isleftdeep = ast.left.deep
     if ast.left
+        isleftdeep = ast.left.deep
         # the ast to check parents against
         parentast = if isleftdeep then ast.left.right else ast.left
         # check dom nodes for this ast level
