@@ -45,12 +45,13 @@ var subs  = zu.find(nodes, 'div#a > span.b');
 * Performance. Especially matching should be fast.
 
 * XML bias. HTML is the odd one out. Namespaces do not need escaping
-  in selector expressions (`zu.find nodes, 'e:event'`).
+  in selector expressions (`zu.find(nodes, 'e:event')`).
 
 ### Curry
 
-Each `zu.[something]` that takes two arguments also have a curried
-version `zu.[something]With` Example illustrated with `zu.parent`.
+Each `zu.[something](n,e)` that takes two arguments also have two
+curried version `zu.[something]With(n)` and `zu.[something]With(e)`
+Example illustrated with `zu.parent`.
 
 ##### Both arguments
 
@@ -122,13 +123,17 @@ The following selectors are (currently) supported:
 
 ### Parsing
 
-##### parseXml(str)
+##### parseXml
+
+`zu.parseXml(str)`
 
 `:: s -> ns`
 
 Parse an XML string to an array of nodes.
 
-##### parseHtml(str)
+##### parseHtml
+
+`zu.parseHtml(str)`
 
 `:: s -> ns`
 
@@ -140,26 +145,34 @@ are not further parsed, `<img>` tags does not need closing etc.
 
 ### Data out
 
-##### xml(nodes)
+##### xml
+
+`zu.xml(nodes)`
 
 `:: ns -> s`
 
 Turn given array of nodes into a string XML form.
 
-##### html(nodes)
+##### html
+
+`zu.html(nodes)`
 
 `:: ns -> s`
 
 Turn given array of nodes into a string HTML form.
 
-##### text(nodes)
+##### text
+
+`zu.text(nodes)`
 
 `:: ns -> s`
 
 Turn given array of text nodes into a string, where the
 contents of each node is concatenated together.
 
-##### attr(nodes, name)
+##### attr
+
+`zu.attr(nodes, name)`
 
 * `:: ns, s -> s`
 
@@ -171,7 +184,9 @@ Also `attrWith(nodes or name)`
 Return the attribute value for `names` from the first element in the
 given array of nodes.
 
-##### hasClass(nodes, name)
+##### hasClass
+
+`zu.hasClass(nodes, name)`
 
 * `:: ns, s -> s`
 
@@ -187,7 +202,9 @@ class.
 
 ### Selectors
 
-##### find(nodes, exp)
+##### find
+
+`zu.find(nodes, exp)`
 
 * `:: ns, s -> ns`
 
@@ -199,7 +216,9 @@ Also `findWith(nodes or exp)`
 Match the given nodes, and any descendants of the given nodes against
 the given expression.
 
-##### children(nodes, exp)
+##### children
+
+`zu.children(nodes, exp)`
 
 * `:: ns, s -> ns`
 * `:: ns -> ns`
@@ -213,7 +232,9 @@ Match the immediate children of the given nodes against the given
 expression. Also `children(nodes)` to get immediate children without
 any filtering expression.
 
-#####  closest(nodes, exp)
+#####  closest
+
+`zu. closest(nodes, exp)`
 
 * `:: ns, s -> ns`
 * `:: ns -> ns`
@@ -228,6 +249,8 @@ expression and return the first match.
 
 ##### filter(nodes, exp)
 
+`zu.filter
+
 * `:: ns, s -> ns`
 * `:: ns -> ns`
 
@@ -239,7 +262,9 @@ Also `filterWith(nodes or exp)`
 Filter the given set of nodes using the expression. Also
 `filter(nodes)` just returns the same nodes (however in a new array).
 
-##### is(nodes, exp)
+##### is
+
+`zu.is(nodes, exp)`
 
 * `:: ns, s -> bool`
 * `:: ns -> bool`
@@ -252,7 +277,9 @@ Also `isWith(nodes or exp)`
 Filter the given set of nodes using the expression and tell whether
 any matched.
 
-##### next(nodes, exp)
+##### next
+
+`zu.next(nodes, exp)`
 
 * `:: ns, s -> ns`
 * `:: ns -> ns`
@@ -265,7 +292,9 @@ Also `nextWith(nodes or exp)`
 Select immediate sibling nodes to the right of given nodes, optionally
 apply a filter expression.
 
-##### nextAll(nodes, exp)
+##### nextAll
+
+`zu.nextAll(nodes, exp)`
 
 * `:: ns, s -> ns`
 * `:: ns -> ns`
@@ -278,7 +307,9 @@ Also `nextAllWith(nodes or exp)`
 Select all sibling nodes to the right of the given nodes, optionally
 filtered by an expression.
 
-##### parent(nodes, exp)
+##### parent
+
+`zu.parent(nodes, exp)`
 
 * `:: ns, s -> ns`
 * `:: ns -> ns`
@@ -291,7 +322,9 @@ Also `parentWith(nodes or exp)`
 Select immediate parent nodes of given nodes, optionally filtered by
 an expression.
 
-##### parents(nodes, exp)
+##### parents
+
+`zu.parents(nodes, exp)`
 
 * `:: ns, s -> ns`
 * `:: ns -> ns`
@@ -304,7 +337,9 @@ Also `parentsWith(nodes or exp)`
 Select all parent nodes of given nodes, optionally filtered by an
 expression.
 
-##### prev(nodes, exp)
+##### prev
+
+`zu.prev(nodes, exp)`
 
 * `:: ns, s -> ns`
 * `:: ns -> ns`
@@ -317,7 +352,9 @@ Also `prevWith(nodes or exp)`
 Select immediate sibling nodes to the left of given nodes, optionally
 apply a filter expression.
 
-##### prevAll(nodes, exp)
+##### prevAll
+
+`zu.prevAll(nodes, exp)`
 
 * `:: ns, s -> ns`
 * `:: ns -> ns`
@@ -330,7 +367,9 @@ Also `prevAllWith(nodes or exp)`
 Select all sibling nodes to the left of the given nodes, optionally
 filtered by an expression.
 
-##### siblings(nodes, exp)
+##### siblings
+
+`zu.siblings(nodes, exp)`
 
 * `:: ns, s -> ns`
 * `:: ns -> ns`
