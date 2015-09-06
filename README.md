@@ -35,7 +35,7 @@ var subs  = zu.find(nodes, 'div#a > span.b');
 
 * Composable [curried][4] functions, not methods.
 
-* Selectors returns `Array`s, not "array-like objects". This means
+* Selectors return `Array`s, not "array-like objects". This means
   functional libraries such as [fnuc][2] and [Ramda][3] can
   interoperate.
 
@@ -47,7 +47,7 @@ var subs  = zu.find(nodes, 'div#a > span.b');
 * XML bias. HTML is the odd one out. Namespaces do not need escaping
   in selector expressions (`zu.find(nodes, 'e:event')`).
 
-### Curry
+## Curry
 
 Each `zu.[something](n,e)` that takes two arguments also have two
 curried version `zu.[something]With(n)` and `zu.[something]With(e)`
