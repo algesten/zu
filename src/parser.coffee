@@ -2,12 +2,15 @@
 lexer = require './lexer'
 spc = split ' '
 
+NOT_QUOTE = /((?!")[^\\]|\\.)*/g        # anything but quote
+NOT_CLOSE_PAREN = /((?!\))[^\\]|\\.)*/g # anything but close paren
+
 # get a quoted or unquoted string
 string = (parse) ->
     token = parse.peek()
     if token.type == 'quote'
         parse.consume()
-        word = parse.expect(/((?!")[^\\]|\\.)*/g) # anything but quote
+        word = parse.expect(NOT_QUOTE)
         throw new Error "Expected quoted string #{parse.pos()}: #{parse.s}" unless word
         end = parse.expect('quote')
         word
@@ -77,7 +80,10 @@ sel_pseudo = (parse, token) ->
 PSEUDO =
     'contains': (parse) ->
         parse.expect('opparen')
-        val = string(parse).word
+        val = if parse.peek().type == 'quote'
+            string(parse).word
+        else
+            parse.expect(NOT_CLOSE_PAREN).word
         parse.expect('clparen')
         val
     'empty':       ->

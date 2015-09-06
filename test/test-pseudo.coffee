@@ -22,6 +22,8 @@ html = '''
     <a class="a4" href="http://example.cn">Chinese (Traditional):</a>
     <span class="s4" lang="zh-TW">世_界您好！</span>
     <span foo="" class="s5">Not lang</span>
+    <em class="e1">foo.bar#123</em>
+    <em class="e2">foo(bar)123</em>
 </div>
 '''
 
@@ -33,6 +35,12 @@ describe 'pseudo-class', ->
 
         it 'selects elements holding the specified text content', ->
             eql zu.find(ns, 'span:contains(世界您好！)'), ['<span.s3>']
+
+        it 'selects elements with text content that are control chars', ->
+            eql zu.find(ns, 'em:contains(foo.bar#123)'), ['<em.e1>']
+
+        it 'selects using quoted strings', ->
+            eql zu.find(ns, 'em:contains("foo(bar)123")'), ['<em.e2>']
 
     describe ':empty', ->
 
@@ -48,4 +56,4 @@ describe 'pseudo-class', ->
 
         it 'selects nodes that are the last child element of their parent', ->
             eql zu.find(ns, '*:last-child'), ['<span.s1>','<span.s23>',
-            '<img>','<span.s3>','<span.s5>']
+            '<img>','<span.s3>','<em.e2>']
