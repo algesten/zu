@@ -55,7 +55,7 @@ Example illustrated with `zu.parent`.
 
 ##### Both arguments
 
-`:: ns, s -> ns`
+* `:: ns, s -> ns`
 
 No curry here.
 
@@ -65,7 +65,7 @@ zu.parent(nodes, exp);
 
 ##### One argument
 
-`:: ns -> ns`
+* `:: ns -> ns`
 
 Equivalent to having `null` as second argument.
 
@@ -75,7 +75,7 @@ zu.parent(nodes);
 
 ##### Partially applied nodes
 
-`:: ns -> s -> ns`
+* `:: ns -> s -> ns`
 
 Provided an array, gives a function expecting the expression.
 
@@ -85,7 +85,7 @@ zu.parentWith(nodes);
 
 ##### Partially applied with expression
 
-`:: s -> ns -> ns`
+* `:: s -> ns -> ns`
 
 Provided an expression, gives a function expecting an array.
 
@@ -127,7 +127,7 @@ The following selectors are (currently) supported:
 
 `zu.parseXml(str)`
 
-`:: s -> ns`
+* `:: s -> ns`
 
 Parse an XML string to an array of nodes.
 
@@ -135,12 +135,11 @@ Parse an XML string to an array of nodes.
 
 `zu.parseHtml(str)`
 
-`:: s -> ns`
-
 Parse an HTML string to an array of nodes. The difference from XML is
 that certain HTML elements get special treatment. `<script>` contents
 are not further parsed, `<img>` tags does not need closing etc.
 
+* `:: s -> ns`
 
 
 ### Data out
@@ -149,54 +148,54 @@ are not further parsed, `<img>` tags does not need closing etc.
 
 `zu.xml(nodes)`
 
-`:: ns -> s`
-
 Turn given array of nodes into a string XML form.
+
+* `:: ns -> s`
 
 ##### html
 
 `zu.html(nodes)`
 
-`:: ns -> s`
-
 Turn given array of nodes into a string HTML form.
+
+* `:: ns -> s`
 
 ##### text
 
 `zu.text(nodes)`
 
-`:: ns -> s`
-
 Turn given array of text nodes into a string, where the
 contents of each node is concatenated together.
+
+* `:: ns -> s`
 
 ##### attr
 
 `zu.attr(nodes, name)`
 
+Return the attribute value for `names` from the first element in the
+given array of nodes.
+
 * `:: ns, s -> s`
 
-Also `attrWith(nodes or name)`
+Also `zu.attrWith(nodes or name)`
 
 * `:: ns -> s  -> s`
 * `:: s  -> ns -> s`
 
-Return the attribute value for `names` from the first element in the
-given array of nodes.
-
 ##### hasClass
+
+Test whether any node in the given array of nodes has a `name` as a
+class.
 
 `zu.hasClass(nodes, name)`
 
 * `:: ns, s -> s`
 
-Also `hasClassWith(nodes or name)`
+Also `zu.hasClassWith(nodes or name)`
 
 * `:: ns -> s  -> s`
 * `:: s  -> ns -> s`
-
-Test whether any node in the given array of nodes has a `name` as a
-class.
 
 
 
@@ -206,50 +205,53 @@ class.
 
 `zu.find(nodes, exp)`
 
+Match the given nodes, and any descendants of the given nodes against
+the given expression.
+
 * `:: ns, s -> ns`
 
-Also `findWith(nodes or exp)`
+Also `zu.findWith(nodes or exp)`
 
 * `:: s  -> ns -> ns`
 * `:: ns -> s  -> ns`
 
-Match the given nodes, and any descendants of the given nodes against
-the given expression.
-
 ##### children
+
+Match the immediate children of the given nodes against the given
+expression. Also `zu.children(nodes)` to get immediate children without
+any filtering expression.
 
 `zu.children(nodes, exp)`
 
 * `:: ns, s -> ns`
 * `:: ns -> ns`
 
-Also `childrenWith(nodes or exp)`
+Also `zu.childrenWith(nodes or exp)`
 
 * `:: s  -> ns -> ns`
 * `:: ns -> s  -> ns`
-
-Match the immediate children of the given nodes against the given
-expression. Also `children(nodes)` to get immediate children without
-any filtering expression.
 
 #####  closest
 
 `zu. closest(nodes, exp)`
 
+Test the given set of nodes and recursively parent nodes against
+expression and return the first match.
+
 * `:: ns, s -> ns`
 * `:: ns -> ns`
 
-Also `closestWith(nodes or exp)`
+Also `zu.closestWith(nodes or exp)`
 
 * `:: s  -> ns -> ns`
 * `:: ns -> s  -> ns`
 
-Test the given set of nodes and recursively parent nodes against
-expression and return the first match.
+##### filter
 
-##### filter(nodes, exp)
+`zu.filter(nodes, exp)`
 
-`zu.filter
+Filter the given set of nodes using the expression. Also
+`zu.filter(nodes)` just returns the same nodes (however in a new array).
 
 * `:: ns, s -> ns`
 * `:: ns -> ns`
@@ -259,128 +261,125 @@ Also `filterWith(nodes or exp)`
 * `:: s  -> ns -> ns`
 * `:: ns -> s  -> ns`
 
-Filter the given set of nodes using the expression. Also
-`filter(nodes)` just returns the same nodes (however in a new array).
-
 ##### is
 
 `zu.is(nodes, exp)`
 
+Filter the given set of nodes using the expression and tell whether
+any matched.
+
 * `:: ns, s -> bool`
 * `:: ns -> bool`
 
-Also `isWith(nodes or exp)`
+Also `zu.isWith(nodes or exp)`
 
 * `:: s  -> ns -> bool`
 * `:: ns -> s  -> bool`
-
-Filter the given set of nodes using the expression and tell whether
-any matched.
 
 ##### next
 
 `zu.next(nodes, exp)`
 
+Select immediate sibling nodes to the right of given nodes, optionally
+apply a filter expression.
+
 * `:: ns, s -> ns`
 * `:: ns -> ns`
 
-Also `nextWith(nodes or exp)`
+Also `zu.nextWith(nodes or exp)`
 
 * `:: s  -> ns -> ns`
 * `:: ns -> s  -> ns`
-
-Select immediate sibling nodes to the right of given nodes, optionally
-apply a filter expression.
 
 ##### nextAll
 
 `zu.nextAll(nodes, exp)`
 
+Select all sibling nodes to the right of the given nodes, optionally
+filtered by an expression.
+
 * `:: ns, s -> ns`
 * `:: ns -> ns`
 
-Also `nextAllWith(nodes or exp)`
+Also `zu.nextAllWith(nodes or exp)`
 
 * `:: s  -> ns -> ns`
 * `:: ns -> s  -> ns`
-
-Select all sibling nodes to the right of the given nodes, optionally
-filtered by an expression.
 
 ##### parent
 
 `zu.parent(nodes, exp)`
 
+Select immediate parent nodes of given nodes, optionally filtered by
+an expression.
+
 * `:: ns, s -> ns`
 * `:: ns -> ns`
 
-Also `parentWith(nodes or exp)`
+Also `zu.parentWith(nodes or exp)`
 
 * `:: s  -> ns -> ns`
 * `:: ns -> s  -> ns`
-
-Select immediate parent nodes of given nodes, optionally filtered by
-an expression.
 
 ##### parents
 
 `zu.parents(nodes, exp)`
 
+Select all parent nodes of given nodes, optionally filtered by an
+expression.
+
 * `:: ns, s -> ns`
 * `:: ns -> ns`
 
-Also `parentsWith(nodes or exp)`
+Also `zu.parentsWith(nodes or exp)`
 
 * `:: s  -> ns -> ns`
 * `:: ns -> s  -> ns`
-
-Select all parent nodes of given nodes, optionally filtered by an
-expression.
 
 ##### prev
 
 `zu.prev(nodes, exp)`
 
+Select immediate sibling nodes to the left of given nodes, optionally
+apply a filter expression.
+
 * `:: ns, s -> ns`
 * `:: ns -> ns`
 
-Also `prevWith(nodes or exp)`
+Also `zu.prevWith(nodes or exp)`
 
 * `:: s  -> ns -> ns`
 * `:: ns -> s  -> ns`
-
-Select immediate sibling nodes to the left of given nodes, optionally
-apply a filter expression.
 
 ##### prevAll
 
 `zu.prevAll(nodes, exp)`
 
+Select all sibling nodes to the left of the given nodes, optionally
+filtered by an expression.
+
 * `:: ns, s -> ns`
 * `:: ns -> ns`
 
-Also `prevAllWith(nodes or exp)`
+Also `zu.prevAllWith(nodes or exp)`
 
 * `:: s  -> ns -> ns`
 * `:: ns -> s  -> ns`
-
-Select all sibling nodes to the left of the given nodes, optionally
-filtered by an expression.
 
 ##### siblings
 
 `zu.siblings(nodes, exp)`
 
+Select all sibling nodes both to the left and right, optionally
+filtered by an expression.
+
 * `:: ns, s -> ns`
 * `:: ns -> ns`
 
-Also `siblingsWith(nodes or exp)`
+Also `zu.siblingsWith(nodes or exp)`
 
 * `:: s  -> ns -> ns`
 * `:: ns -> s  -> ns`
-
-Select all sibling nodes both to the left and right, optionally
-filtered by an expression.
 
 
 License
