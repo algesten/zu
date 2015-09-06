@@ -45,20 +45,12 @@ tagprev = (n) ->
 module.exports =
 
     find: do ->
-        # hand opped since it is the most common selector
-        (roots, exp) ->
-            ast = parse exp
-            return [] unless ast
-            return roots unless roots
-            # we allow passing in nodes not in arrays
-            roots = if Array.isArray(roots) then roots else [roots]
-            # ast.deep means a child/descend expression
-            lst = if ast?.deep then ast.right else ast
-            nodes = []
-            for n in roots when n.type == 'tag'
-                for d in n._desc when evl(d, lst) and nodes.indexOf(d) == -1
-                    nodes[nodes.length] = d
-            matcher roots, nodes, ast
+        walk = (nodes, fn) ->
+            for n in nodes when n.type == 'tag'
+                fn n
+                walk n.children, fn if n.children
+            null
+        exec walk, null, true
 
     closest: do ->
         up = (n, fn) ->

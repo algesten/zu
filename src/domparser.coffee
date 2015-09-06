@@ -1,4 +1,4 @@
-{merge, replace, concat, map, filter} = require 'fnuc'
+{merge, replace} = require 'fnuc'
 htmlparser = require 'htmlparser2'
 serialize  = require 'dom-serializer'
 
@@ -39,24 +39,9 @@ renderText = (nodes, out) ->
         else if n.type == 'text'
             out.push n.data unless onlywhite(n.data)
 
-onlytag = filter (n) -> n.type == 'tag'
-
-# prepare the tree so each level has an array _desc with all
-# descendants and self from that level
-prepdesc = (nodes) ->
-    for n in nodes when n.type == 'tag'
-        if n.children
-            tags = onlytag(n.children)
-            prepdesc tags
-            n._desc = concat n, (map tags, (c) -> c._desc)...
-        else
-            n._desc = [n]
-    nodes
-
-
 module.exports =
-    parseXml:  (s) -> prepdesc doparse s, {xmlMode:true}
-    parseHtml: (s) -> prepdesc doparse s
+    parseXml:  (s) -> doparse s, {xmlMode:true}
+    parseHtml: (s) -> doparse s
     xml:  (dom) ->
         return '' unless dom
         dom = if Array.isArray(dom) then dom else [dom]
