@@ -27,7 +27,8 @@ ns = zu.parseHtml html
 describe 'attrib', ->
 
     it 'selects just span[lang]', ->
-        eql zu.find(ns, 'span[lang]'), ['<span.s1>', '<span.s2>', '<span.s2>', '<span.s3>', '<span.s4>']
+        eql zu.find(ns, 'span[lang]'), ['<span.s1>', '<span.s2>',
+        '<span.s2>', '<span.s3>', '<span.s4>']
 
     it 'selects span[lang="pt"]', ->
         eql zu.find(ns, 'span[lang=pt]'), ['<span.s2>']
