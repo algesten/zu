@@ -34,3 +34,14 @@ describe 'no descend', ->
 
     it 'selects multiple levels', ->
         eql zu.find(ns, 'span'), ['<span.c>','<span.d>']
+
+describe 'findWith', ->
+
+    it 'works for expression first', ->
+        eql zu.findWith('.c')(ns), ['<span.c>']
+
+    it 'works for nodes first', ->
+        eql zu.findWith(ns)('.c'), ['<span.c>']
+
+    it 'works for node without array first', ->
+        eql zu.findWith(ns[0])('.c'), ['<span.c>']

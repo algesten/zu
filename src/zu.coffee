@@ -2,7 +2,8 @@
 hasclass  = require './hasclass'
 
 # fn can be partially applied either with an array or an expression.
-withcurry = (fn) -> (a) -> if Array.isArray a then ((exp) -> fn a, exp) else ((ns)  -> fn ns, a)
+withcurry = (fn) -> (a) ->
+    if a.constructor == String then ((ns)  -> fn ns, a) else ((exp) -> fn a, exp)
 
 # key fooWith for foo
 withk = (s) -> "#{s}With"
