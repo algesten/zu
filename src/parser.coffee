@@ -2,23 +2,21 @@
 lexer = require './lexer'
 spc = split ' '
 
-NOT_QUOTE = /((?!")[^\\]|\\.)*/g        # anything but quote
-NOT_CLOSE_PAREN = /((?!\))[^\\]|\\.)*/g # anything but close paren
+NOT_QUOTE = /((?!")[^\\]|\\.)*/g           # anything but quote
+NOT_ATTRIB = /((?![\]=~|^$*])[^\\]|\\.)*/g # anything but ]=~|^$*
+NOT_CLBRACK = /((?!])[^\\]|\\.)*/g         # anything but close bracket
+NOT_CLPAREN = /((?!\))[^\\]|\\.)*/g        # anything but close paren
 
-# get a quoted or unquoted string
-string = (parse) ->
+# get a quoted string or something matching given re
+quotedor = (parse, re) ->
     token = parse.peek()
     if token.type == 'quote'
         parse.consume()
         word = parse.expect(NOT_QUOTE)
-        throw new Error "Expected quoted string #{parse.pos()}: #{parse.s}" unless word
         end = parse.expect('quote')
         word
-    else if token.type == 'word'
-        parse.consume()
-        token
     else
-        throw new Error "Expected quote or word #{parse.pos()}: #{parse.s}"
+        parse.expect(re)
 
 continueright = (parse) ->
     token = parse.peek()
@@ -49,11 +47,11 @@ sel_all    = (parse, token) ->
     mixin {type:'all', token, right}
 
 sel_attrib = (parse, token) ->
-    attr = string(parse).word
+    attr = quotedor(parse, NOT_ATTRIB).word
     ntoken = parse.peek()
     attrtype = ATTR_TYPES[ntoken.type]? parse
     throw new Error "Parse failed at col #{parse.pos()}: #{parse.s}" unless attrtype
-    attrval = if attrtype == 'exists' then null else string(parse).word
+    attrval = if attrtype == 'exists' then null else quotedor(parse, NOT_CLBRACK).word
     parse.expect('clbrack')
     right = continueright parse
     {type:'attrib', token, attrtype, attr, attrval, right}
@@ -80,10 +78,7 @@ sel_pseudo = (parse, token) ->
 PSEUDO =
     'contains': (parse) ->
         parse.expect('opparen')
-        val = if parse.peek().type == 'quote'
-            string(parse).word
-        else
-            parse.expect(NOT_CLOSE_PAREN).word
+        val = quotedor(parse, NOT_CLPAREN).word
         parse.expect('clparen')
         val
     'empty':       ->
