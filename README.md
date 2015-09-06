@@ -47,6 +47,67 @@ var subs  = zu.find(nodes, 'div#a > span.b');
 * XML bias. HTML is the odd one out. Namespaces do not need escaping
   in selector expressions (`zu.find(nodes, 'e:event')`).
 
+## Example
+
+```javascript
+var zu = require('zu');
+var fs = require('fs');
+
+// parse an xml document to array of nodes.
+var xml = zu.parseXml(fs.readFileSync('./mydoc.xml', 'utf-8'));
+
+// partial application to make function that does a find over the xml.
+var fn = zu.findWith(xml);
+
+// find some elements. this is just a plain array of
+// nodes. the nodes are inspected using the api.
+var events = fn('e:eventList > e:event');
+
+// use regular Array.prototype.map
+var myresult = events.map(function(ev) {
+
+    // function bound to the events.
+    var efn = zu.findWith(ev);
+
+    // extract some interesting data.
+    return {
+        eventId:   zu.text(efn('e:eventId')),
+        title:     zu.text(efn('e:title')),
+        startTime: zu.text(efn('e:startTime')),
+        eventXml:  zu.xml(ev)     // event as an xml string
+    };
+
+});
+```
+
+## The DOM nodes
+
+Most functions `find`, `closest`, `next` etc accept and return an
+array of nodes. Where the API accepts an array of nodes in, you can
+also use a single node without a wrapping array as well. The return
+type will however always be an array.
+
+```javascipt
+var html = parseHtml(someStr);
+
+var dom1 = zu.find(html, 'div');
+var dom2 = zu.find(html[0], 'div'); // we can use non-array
+
+// dom1 and dom2 are different arrays
+// with the same nodes inside.
+```
+
+The node's datastructure is considered opaque (it is htmlparser2
+[domhandler object](https://github.com/fb55/domhandler)). This
+implementation may change, so accessing the internal of those objects
+may be breaking. The way to get data out are:
+
+* [`zu.text(node or nodes)`](#text)
+* [`zu.attr(node or nodes)`](#attr)
+* [`zu.xml(node or nodes)`](#xml)
+* [`zu.html(node or nodes)`](#html)
+
+
 ## Curry
 
 Each `zu.[something](n,e)` that takes two arguments also have two
