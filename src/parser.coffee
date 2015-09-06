@@ -33,10 +33,9 @@ sel_id     = tagexp 'id'
 sel_class  = tagexp 'class'
 sel_word   = (parse, token) ->
     ntoken = parse.peek()
-    if ntoken?.type == 'colon'
-        # we must check whether the next token is a known pseudo-class
+    if ntoken and (ntoken.type == 'colon' or (ispipe = ntoken.type == 'pipe'))
         ntoken2 = parse.peek(false, ntoken.len)
-        if ntoken2?.type == 'word' and not PSEUDO[ntoken2.word]
+        if ntoken2?.type == 'word' and (ispipe or not PSEUDO[ntoken2.word])
             parse.consume(); parse.consume()
             token.word = token.word + ":" + ntoken2.word
             token.len = token.word.length

@@ -103,6 +103,7 @@ The following selectors are (currently) supported:
 * Child `div > span`. Also works as `> span` for immediate children.
 * Class `div.foo`
 * Id `div#bar`
+* Namespace `e|div`, but also `e:div` for names not clashing with pseudo-classes.
 * Attributes with or without quotes
   - exists `div[foo]`
   - equals `div[foo=bar]`

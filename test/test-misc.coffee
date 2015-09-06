@@ -34,11 +34,21 @@ describe 'hasClass', ->
 
 describe 'namespaces', ->
 
-    xml = '<c:foo>qwe<b:bar>panda</b:bar></c:foo>'
+    xml = '<c:foo>qwe<b:bar>panda</b:bar><d:empty>blah</d:empty></c:foo>'
     ns2 = zu.parseXml xml
+
+    it 'serializes normally', ->
+        assert.equal zu.xml(ns2),
+        '<c:foo>qwe<b:bar>panda</b:bar><d:empty>blah</d:empty></c:foo>'
 
     it 'just parses as regular nodes', ->
         eql zu.find(ns2, 'b:bar'), ['<b:bar>']
 
-    it 'serializes normally', ->
-        assert.equal zu.xml(ns2), '<c:foo>qwe<b:bar>panda</b:bar></c:foo>'
+    it 'will however not work for nodes named like pseudo classes', ->
+        eql zu.find(ns2, 'd:empty'), []
+
+    it 'also works with official css namespace b|bar', ->
+        eql zu.find(ns2, 'b|bar'), ['<b:bar>']
+
+    it 'the official css namespace works nodes named like pseudo classes', ->
+        eql zu.find(ns2, 'd|empty'), ['<d:empty>']
