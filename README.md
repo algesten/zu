@@ -103,7 +103,7 @@ implementation may change, so accessing the internal of those objects
 may be breaking. The way to get data out are:
 
 * [`zu.text(node or nodes)`](#text)
-* [`zu.attr(node or nodes)`](#attr)
+* [`zu.attr(node or nodes, attrname)`](#attr)
 * [`zu.xml(node or nodes)`](#xml)
 * [`zu.html(node or nodes)`](#html)
 
