@@ -32,25 +32,25 @@ onlywhite = do ->
     re = /^\s+$/
     (s) -> !!s.match re
 
-renderText = (nodes, out) ->
+renderText = (nodes) ->
+    _renderText nodes, out = []
+    out.join('')
+
+_renderText = (nodes, out) ->
     for n in nodes when n
         if n.type == 'tag' and n.children
-            renderText n.children, out
+            _renderText n.children, out
         else if n.type == 'text'
             out.push n.data unless onlywhite(n.data)
+
+output = (fn, opts) -> (nodes) ->
+    return '' unless nodes
+    nodes = if Array.isArray(nodes) then nodes else [nodes]
+    fn nodes, opts
 
 module.exports =
     parseXml:  (s) -> doparse s, {xmlMode:true}
     parseHtml: (s) -> doparse s
-    xml:  (dom) ->
-        return '' unless dom
-        dom = if Array.isArray(dom) then dom else [dom]
-        serialize dom, xmlMode:true
-    html: (dom) ->
-        return '' unless dom
-        dom = if Array.isArray(dom) then dom else [dom]
-        serialize dom
-    text: (dom) ->
-        return '' unless dom
-        dom = if Array.isArray(dom) then dom else [dom]
-        renderText dom, (out = []); out.join('')
+    xml:  output serialize, xmlMode:true
+    html: output serialize
+    text: output renderText
