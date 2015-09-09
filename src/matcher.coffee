@@ -2,7 +2,7 @@
 filter    = require './filter'
 escre     = require './escre'
 hasclass  = require './hasclass'
-domparser = require './domparser'
+{text}    = require('./domparser').output
 
 isId = (n, id) -> n.attribs?.id == id
 onlytag = (as) -> filter as, (n) -> n.type == 'tag'
@@ -30,7 +30,7 @@ evlattr = (n, ast) ->
 # evaluate pseudo selector
 evlpseudo = (n, ast) ->
     if ast.pseudotype == 'contains'
-        domparser.text(n).indexOf(ast.pseudoval) >= 0
+        text(n).indexOf(ast.pseudoval) >= 0
     else if ast.pseudotype == 'empty'
         !n?.children?.length or !firstfn n.children, (c) -> c.type == 'tag' or c.type == 'text'
     else if ast.pseudotype == 'first-child'

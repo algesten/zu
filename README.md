@@ -207,58 +207,84 @@ are not further parsed, `<img>` tags does not need closing etc.
 
 ##### xml
 
-`zu.xml(nodes)`
+`zu.xml(nodes, exp)`
 
-Turn given array of nodes into a string XML form.
+Turn given array of nodes into a string XML form. Optionally prefilters
+the nodes using an expression.
 
+* `:: ns, s -> s`
 * `:: ns -> s`
+
+Also `zu.xmlWith(nodes or exp)`
+
+* `:: s  -> ns -> s`
+* `:: ns -> s  -> s`
 
 ##### html
 
 `zu.html(nodes)`
 
-Turn given array of nodes into a string HTML form.
+Turn given array of nodes into a string HTML form. Optionally prefilters
+the nodes using an expression.
 
+* `:: ns, s -> s`
 * `:: ns -> s`
+
+Also `zu.htmlWith(nodes or exp)`
+
+* `:: s  -> ns -> s`
+* `:: ns -> s  -> s`
 
 ##### text
 
-`zu.text(nodes)`
+`zu.text(nodes, exp)`
 
-Turn given array of text nodes into a string, where the
-contents of each node is concatenated together.
+Turn given array of text nodes into a string, where the contents of
+each node is concatenated together. Optionally prefilters the nodes
+using an expression.
 
+* `:: ns, s -> s`
 * `:: ns -> s`
+
+Also `zu.textWith(nodes or exp)`
+
+* `:: s  -> ns -> s`
+* `:: ns -> s  -> s`
 
 ##### attr
 
-`zu.attr(nodes, name)`
+`zu.attr(nodes, exp, name)`
 
 Return the attribute value for `names` from the first element in the
-given array of nodes.
+given array of nodes. Optionaly filters the nodes using the given
+expression.
 
 * `:: ns, s -> s`
+* `:: ns, s, s -> s`
 
 Also `zu.attrWith(nodes or name)`
 
 * `:: ns -> s  -> s`
+* `:: ns, s -> s  -> s`
 * `:: s  -> ns -> s`
+* `:: s  -> ns, s -> s`
 
 ##### hasClass
 
+`zu.hasClass(nodes, exp, name)`
+
 Test whether any node in the given array of nodes has a `name` as a
-class.
+class. Optionally filters the expression using expression.
 
-`zu.hasClass(nodes, name)`
-
-* `:: ns, s -> s`
+* `:: ns, s -> bool`
+* `:: ns, s, s -> bool`
 
 Also `zu.hasClassWith(nodes or name)`
 
-* `:: ns -> s  -> s`
-* `:: s  -> ns -> s`
-
-
+* `:: ns -> s  -> bool`
+* `:: ns, s -> s  -> bool`
+* `:: s  -> ns -> bool`
+* `:: s  -> ns, s -> bool`
 
 ### Selectors
 

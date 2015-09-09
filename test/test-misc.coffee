@@ -23,6 +23,14 @@ describe 'attr', ->
     it 'accepts non arrays', ->
         assert.equal zu.attr(zu.find(ns,'img')[0],'src'), 'foo1.jpg'
 
+    it 'optionally filters using expression', ->
+        assert.equal zu.attr(ns, 'img', 'src'), 'foo1.jpg'
+
+    it 'optionally filters using expression in With-version', ->
+        assert.equal zu.attrWith(ns, 'img')('src'), 'foo1.jpg'
+        assert.equal zu.attrWith('src')(ns, 'img'), 'foo1.jpg'
+
+
 describe 'hasClass', ->
 
     it 'checks whether any of the matched elements has the class', ->
@@ -31,6 +39,14 @@ describe 'hasClass', ->
 
     it 'returns false if none has the class', ->
         assert.equal zu.hasClass(zu.find(ns,'img'),'nosuchclass'), false
+
+    it 'optionally filters using expression', ->
+        assert.equal zu.hasClass(ns, 'img', 'c'), true
+
+    it 'optionally filters using expression in With-version', ->
+        assert.equal zu.hasClassWith(ns, 'img')('c'), true
+        assert.equal zu.hasClassWith('c')(ns, 'img'), true
+
 
 describe 'namespaces', ->
 

@@ -27,6 +27,9 @@ describe 'xml', ->
     it 'is ok with null', ->
         assert.equal zu.xml(null), ''
 
+    it 'takes an optional expression', ->
+        assert.equal zu.xml(ns, 'img'), '<img src="foo.jpg"/>'
+
 describe 'html', ->
 
     it 'renders output as html', ->
@@ -39,6 +42,9 @@ describe 'html', ->
     it 'is ok with null', ->
         assert.equal zu.html(null), ''
 
+    it 'takes an optional expression', ->
+        assert.equal zu.html(ns, 'img'), '<img src="foo.jpg">'
+
 describe 'text', ->
 
     it 'renders output as text', ->
@@ -50,3 +56,6 @@ describe 'text', ->
 
     it 'accepts undefined', ->
         assert.equal zu.text(undefined), ''
+
+    it 'takes an optional expression', ->
+        assert.equal zu.text(ns, 'span'), 'foo'
