@@ -53,6 +53,10 @@ describe 'descend', ->
         it 'selects', ->
             eql zu.find(ns, 'div#a span.g em'), ['<em>']
 
+        it 'does not ascend above starting point', ->
+            start = zu.find 'span.g'
+            eql zu.find(start, 'div#a span.g em'), []
+
     describe 'same selector many levels', ->
 
         it 'selects correct', ->
