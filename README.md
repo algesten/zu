@@ -126,7 +126,7 @@ zu.parent(nodes, exp);
 
 ##### One argument
 
-`:: [n] -> [n]
+`:: [n] -> [n]`
 
 Equivalent to having `null` as second argument.
 
@@ -134,24 +134,26 @@ Equivalent to having `null` as second argument.
 zu.parent(nodes);
 ```
 
-##### Partially applied nodes
+##### Partially applied with nodes
 
 `:: [n] -> s -> [n]`
 
-Provided an array, gives a function expecting the expression.
+Provided an array of nodes, gives a function expecting the expression.
 
 ```javascript
-zu.parentWith(nodes);
+fn = zu.parentWith(nodes);
+fn(exp);
 ```
 
 ##### Partially applied with expression
 
 `:: s -> [n] -> [n]`
 
-Provided an expression, gives a function expecting an array.
+Provided an expression, gives a function expecting an array of nodes.
 
 ```javascript
-zu.parentWith(exp);
+fn = zu.parentWith(exp);
+fn(nodes);
 ```
 
 
