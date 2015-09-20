@@ -1,4 +1,4 @@
-{map, firstfn} = require 'fnuc'
+{map, firstfn, head, last, isdef} = require 'fnuc'
 filter    = require './filter'
 escre     = require './escre'
 hasclass  = require './hasclass'
@@ -9,21 +9,21 @@ onlytag = (as) -> filter as, (n) -> n.type == 'tag'
 
 # evaluate attribute selector
 evlattr = (n, ast) ->
-    nv = n?.attribs[ast.attr]
+    return false unless isdef nv = n?.attribs[ast.attr]
     if ast.attrtype == 'exists'
-        !!nv
+        true
     else if ast.attrtype == 'equals'
         nv == ast.attrval
     else if ast.attrtype == 'white'
-        !!nv?.match RegExp "(^| )#{escre ast.attrval}($| )"
+        !!nv.match RegExp "(^| )#{escre ast.attrval}($| )"
     else if ast.attrtype == 'hyphen'
-        !!nv?.match RegExp "^#{escre ast.attrval}($|-)"
+        !!nv.match RegExp "^#{escre ast.attrval}($|-)"
     else if ast.attrtype == 'begin'
-        nv?.indexOf(ast.attrval) == 0
+        nv.indexOf(ast.attrval) == 0
     else if ast.attrtype == 'end'
-        !!nv?.match RegExp "#{escre ast.attrval}$"
+        !!nv.match RegExp "#{escre ast.attrval}$"
     else if ast.attrtype == 'substr'
-        nv?.indexOf(ast.attrval) >= 0
+        nv.indexOf(ast.attrval) >= 0
     else
         false
 
@@ -35,11 +35,10 @@ evlpseudo = (n, ast) ->
         !n?.children?.length or !firstfn n.children, (c) -> c.type == 'tag' or c.type == 'text'
     else if ast.pseudotype == 'first-child'
         if cn = n.parent?.children
-            onlytag(cn).indexOf(n) == 0
+            n == head onlytag(cn)
     else if ast.pseudotype == 'last-child'
         if cn = n.parent?.children
-            tgs = onlytag(cn)
-            tgs.indexOf(n) == tgs.length - 1
+            n == last onlytag(cn)
     else
         false
 

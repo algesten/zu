@@ -1,3 +1,8 @@
-
-# XXX possible to optimize to avoid compiling new regexp
-module.exports = hasclass = (n, clz) -> !!n.attribs?.class?.match RegExp "(^| )#{clz}($| )"
+# ripped off from jQuery hoping that is a fast implementation.
+rclass = /[\t\r\n\f]/g
+module.exports = hasclass = (n, clz) ->
+    cname = " #{clz} "
+    if (c = n.attribs?.class)
+        " #{c} ".replace(rclass,' ').indexOf(cname) >= 0
+    else
+        false
