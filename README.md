@@ -116,7 +116,7 @@ Example illustrated with `zu.parent`.
 
 ##### Both arguments
 
-* `:: ns, s -> ns`
+* `:: [n], s -> [n]`
 
 No curry here.
 
@@ -126,7 +126,7 @@ zu.parent(nodes, exp);
 
 ##### One argument
 
-* `:: ns -> ns`
+* `:: [n] -> [n]
 
 Equivalent to having `null` as second argument.
 
@@ -136,7 +136,7 @@ zu.parent(nodes);
 
 ##### Partially applied nodes
 
-* `:: ns -> s -> ns`
+* `:: [n] -> s -> [n]`
 
 Provided an array, gives a function expecting the expression.
 
@@ -146,7 +146,7 @@ zu.parentWith(nodes);
 
 ##### Partially applied with expression
 
-* `:: s -> ns -> ns`
+* `:: s -> [n] -> [n]`
 
 Provided an expression, gives a function expecting an array.
 
@@ -188,7 +188,7 @@ The following selectors are (currently) supported:
 
 `zu.parseXml(str)`
 
-* `:: s -> ns`
+* `:: s -> [n]`
 
 Parse an XML string to an array of nodes.
 
@@ -200,7 +200,7 @@ Parse an HTML string to an array of nodes. The difference from XML is
 that certain HTML elements get special treatment. `<script>` contents
 are not further parsed, `<img>` tags does not need closing etc.
 
-* `:: s -> ns`
+* `:: s -> [n]`
 
 
 ### Data out
@@ -211,7 +211,7 @@ are not further parsed, `<img>` tags does not need closing etc.
 
 Turn given array of nodes into a string XML form.
 
-* `:: ns -> s`
+* `:: [n] -> s`
 
 ##### html
 
@@ -219,7 +219,7 @@ Turn given array of nodes into a string XML form.
 
 Turn given array of nodes into a string HTML form.
 
-* `:: ns -> s`
+* `:: [n] -> s`
 
 ##### text
 
@@ -228,7 +228,7 @@ Turn given array of nodes into a string HTML form.
 Turn given array of text nodes into a string, where the
 contents of each node is concatenated together.
 
-* `:: ns -> s`
+* `:: [n] -> s`
 
 ##### attr
 
@@ -237,12 +237,12 @@ contents of each node is concatenated together.
 Return the attribute value for `names` from the first element in the
 given array of nodes.
 
-* `:: ns, s -> s`
+* `:: [n], s -> s`
 
 Also `zu.attrWith(nodes or name)`
 
-* `:: ns -> s  -> s`
-* `:: s  -> ns -> s`
+* `:: [n] -> s  -> s`
+* `:: s  -> [n] -> s`
 
 ##### hasClass
 
@@ -251,12 +251,12 @@ class.
 
 `zu.hasClass(nodes, name)`
 
-* `:: ns, s -> s`
+* `:: [n], s -> s`
 
 Also `zu.hasClassWith(nodes or name)`
 
-* `:: ns -> s  -> s`
-* `:: s  -> ns -> s`
+* `:: [n] -> s  -> s`
+* `:: s  -> [n] -> s`
 
 
 
@@ -269,12 +269,12 @@ Also `zu.hasClassWith(nodes or name)`
 Match the given nodes, and any descendants of the given nodes against
 the given expression.
 
-* `:: ns, s -> ns`
+* `:: [n], s -> [n]`
 
 Also `zu.findWith(nodes or exp)`
 
-* `:: s  -> ns -> ns`
-* `:: ns -> s  -> ns`
+* `:: s  -> [n] -> [n]`
+* `:: [n] -> s  -> [n]`
 
 ##### children
 
@@ -284,13 +284,13 @@ any filtering expression.
 
 `zu.children(nodes, exp)`
 
-* `:: ns, s -> ns`
-* `:: ns -> ns`
+* `:: [n], s -> [n]`
+* `:: [n] -> [n]`
 
 Also `zu.childrenWith(nodes or exp)`
 
-* `:: s  -> ns -> ns`
-* `:: ns -> s  -> ns`
+* `:: s  -> [n] -> [n]`
+* `:: [n] -> s  -> [n]`
 
 #####  closest
 
@@ -299,13 +299,13 @@ Also `zu.childrenWith(nodes or exp)`
 Test the given set of nodes and recursively parent nodes against
 expression and return the first match.
 
-* `:: ns, s -> ns`
-* `:: ns -> ns`
+* `:: [n], s -> [n]`
+* `:: [n] -> [n]`
 
 Also `zu.closestWith(nodes or exp)`
 
-* `:: s  -> ns -> ns`
-* `:: ns -> s  -> ns`
+* `:: s  -> [n] -> [n]`
+* `:: [n] -> s  -> [n]`
 
 ##### filter
 
@@ -314,13 +314,13 @@ Also `zu.closestWith(nodes or exp)`
 Filter the given set of nodes using the expression. Also
 `zu.filter(nodes)` just returns the same nodes (however in a new array).
 
-* `:: ns, s -> ns`
-* `:: ns -> ns`
+* `:: [n], s -> [n]`
+* `:: [n] -> [n]`
 
 Also `filterWith(nodes or exp)`
 
-* `:: s  -> ns -> ns`
-* `:: ns -> s  -> ns`
+* `:: s  -> [n] -> [n]`
+* `:: [n] -> s  -> [n]`
 
 ##### is
 
@@ -329,13 +329,13 @@ Also `filterWith(nodes or exp)`
 Filter the given set of nodes using the expression and tell whether
 any matched.
 
-* `:: ns, s -> bool`
-* `:: ns -> bool`
+* `:: [n], s -> bool`
+* `:: [n] -> bool`
 
 Also `zu.isWith(nodes or exp)`
 
-* `:: s  -> ns -> bool`
-* `:: ns -> s  -> bool`
+* `:: s  -> [n] -> bool`
+* `:: [n] -> s  -> bool`
 
 ##### next
 
@@ -344,13 +344,13 @@ Also `zu.isWith(nodes or exp)`
 Select immediate sibling nodes to the right of given nodes, optionally
 apply a filter expression.
 
-* `:: ns, s -> ns`
-* `:: ns -> ns`
+* `:: [n], s -> [n]`
+* `:: [n] -> [n]`
 
 Also `zu.nextWith(nodes or exp)`
 
-* `:: s  -> ns -> ns`
-* `:: ns -> s  -> ns`
+* `:: s  -> [n] -> [n]`
+* `:: [n] -> s  -> [n]`
 
 ##### nextAll
 
@@ -359,13 +359,13 @@ Also `zu.nextWith(nodes or exp)`
 Select all sibling nodes to the right of the given nodes, optionally
 filtered by an expression.
 
-* `:: ns, s -> ns`
-* `:: ns -> ns`
+* `:: [n], s -> [n]`
+* `:: [n] -> [n]`
 
 Also `zu.nextAllWith(nodes or exp)`
 
-* `:: s  -> ns -> ns`
-* `:: ns -> s  -> ns`
+* `:: s  -> [n] -> [n]`
+* `:: [n] -> s  -> [n]`
 
 ##### parent
 
@@ -374,13 +374,13 @@ Also `zu.nextAllWith(nodes or exp)`
 Select immediate parent nodes of given nodes, optionally filtered by
 an expression.
 
-* `:: ns, s -> ns`
-* `:: ns -> ns`
+* `:: [n], s -> [n]`
+* `:: [n] -> [n]`
 
 Also `zu.parentWith(nodes or exp)`
 
-* `:: s  -> ns -> ns`
-* `:: ns -> s  -> ns`
+* `:: s  -> [n] -> [n]`
+* `:: [n] -> s  -> [n]`
 
 ##### parents
 
@@ -389,13 +389,13 @@ Also `zu.parentWith(nodes or exp)`
 Select all parent nodes of given nodes, optionally filtered by an
 expression.
 
-* `:: ns, s -> ns`
-* `:: ns -> ns`
+* `:: [n], s -> [n]`
+* `:: [n] -> [n]`
 
 Also `zu.parentsWith(nodes or exp)`
 
-* `:: s  -> ns -> ns`
-* `:: ns -> s  -> ns`
+* `:: s  -> [n] -> [n]`
+* `:: [n] -> s  -> [n]`
 
 ##### prev
 
@@ -404,13 +404,13 @@ Also `zu.parentsWith(nodes or exp)`
 Select immediate sibling nodes to the left of given nodes, optionally
 apply a filter expression.
 
-* `:: ns, s -> ns`
-* `:: ns -> ns`
+* `:: [n], s -> [n]`
+* `:: [n] -> [n]`
 
 Also `zu.prevWith(nodes or exp)`
 
-* `:: s  -> ns -> ns`
-* `:: ns -> s  -> ns`
+* `:: s  -> [n] -> [n]`
+* `:: [n] -> s  -> [n]`
 
 ##### prevAll
 
@@ -419,13 +419,13 @@ Also `zu.prevWith(nodes or exp)`
 Select all sibling nodes to the left of the given nodes, optionally
 filtered by an expression.
 
-* `:: ns, s -> ns`
-* `:: ns -> ns`
+* `:: [n], s -> [n]`
+* `:: [n] -> [n]`
 
 Also `zu.prevAllWith(nodes or exp)`
 
-* `:: s  -> ns -> ns`
-* `:: ns -> s  -> ns`
+* `:: s  -> [n] -> [n]`
+* `:: [n] -> s  -> [n]`
 
 ##### siblings
 
@@ -434,13 +434,13 @@ Also `zu.prevAllWith(nodes or exp)`
 Select all sibling nodes both to the left and right, optionally
 filtered by an expression.
 
-* `:: ns, s -> ns`
-* `:: ns -> ns`
+* `:: [n], s -> [n]`
+* `:: [n] -> [n]`
 
 Also `zu.siblingsWith(nodes or exp)`
 
-* `:: s  -> ns -> ns`
-* `:: ns -> s  -> ns`
+* `:: s  -> [n] -> [n]`
+* `:: [n] -> s  -> [n]`
 
 
 License
