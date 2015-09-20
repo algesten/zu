@@ -19,7 +19,7 @@ exec = (walk, pre, emptyast) -> (roots, exp) ->
     # no nodes? you get what you give.
     return roots unless roots
     # we allow passing in nodes not in arrays
-    roots = if Array.isArray(roots) then roots else [roots]
+    roots = if roots instanceof Array then roots else [roots]
     # collection of nodes that are starting points for
     # matching the entire ast
     nodes = []

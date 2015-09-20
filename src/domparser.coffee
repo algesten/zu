@@ -45,7 +45,7 @@ _renderText = (nodes, out) ->
 
 output = (fn, opts) -> (nodes) ->
     return '' unless nodes
-    nodes = if Array.isArray(nodes) then nodes else [nodes]
+    nodes = if nodes instanceof Array then nodes else [nodes]
     fn nodes, opts
 
 module.exports =

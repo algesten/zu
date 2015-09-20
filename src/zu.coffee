@@ -1,4 +1,4 @@
-{zipwith, set, mixin, keys, values, converge, map, apply} = require 'fnuc'
+{zipwith, set, mixin, keys, values, converge} = require 'fnuc'
 hasclass  = require './hasclass'
 
 # fn can be partially applied either with an array or an expression.
@@ -17,7 +17,7 @@ withify = do ->
 arg1 = require './domparser'
 
 arg2 = mixin {
-    attr:      (ns, name) -> (if Array.isArray(ns) then ns[0] else ns)?.attribs?[name]
+    attr:      (ns, name) -> (if ns instanceof Array then ns[0] else ns)?.attribs?[name]
     hasClass:  (ns, name) -> return true for n in ns when hasclass(n, name); return false
     }, require './selectors'
 
