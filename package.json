@@ -15,13 +15,13 @@
   "license": "MIT",
   "dependencies": {
     "dom-serializer": "^0.1.0",
-    "fnuc": "^1.0.0",
+    "fnuc": "^1.1.0",
     "htmlparser2": "^3.8.3"
   },
   "devDependencies": {
     "chai": "^3.2.0",
     "coffee-script": "^1.9.3",
-    "mocha": "^2.2.5"
+    "mocha": "^2.3.2"
   },
   "keywords": [
     "css",
