@@ -1,4 +1,4 @@
-{split, mixin, merge} = require 'fnuc'
+{split, merge} = require 'fnuc'
 lexer = require './lexer'
 spc = split ' '
 
@@ -28,7 +28,7 @@ continueright = (parse) ->
 tagexp = (type) -> (parse, token) ->
     word = parse.expect('word').word
     right = continueright parse
-    mixin {type, token, word, right}
+    {type, token, word, right}
 
 sel_id     = tagexp 'id'
 sel_class  = tagexp 'class'
@@ -41,10 +41,10 @@ sel_word   = (parse, token) ->
             token.word = token.word + ":" + ntoken2.word
             token.len = token.word.length
     right = continueright parse
-    mixin {type:'word', token, right}
+    {type:'word', token, right}
 sel_all    = (parse, token) ->
     right = continueright parse
-    mixin {type:'all', token, right}
+    {type:'all', token, right}
 
 sel_attrib = (parse, token) ->
     attr = quotedor(parse, NOT_ATTRIB).word

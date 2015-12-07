@@ -12,7 +12,7 @@ withk = (s) -> "#{s}With"
 # for each k/v pair.
 withify = do ->
     z = (k, fn) -> set(withk(k), withcurry(fn)) set({}, k, fn)
-    converge zipwith(z), keys, values
+    converge keys, values, zipwith(z)
 
 arg1 = require './domparser'
 
