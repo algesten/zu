@@ -1,6 +1,6 @@
 {
   "name": "zu",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "main": "lib/zu.js",
   "description": "Functional DOM grokking with CSS style selectors",
   "repository": {
