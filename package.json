@@ -21,7 +21,7 @@
   "devDependencies": {
     "chai": "^3.4.0",
     "coffee-script": "^1.10.0",
-    "mocha": "^2.3.4"
+    "mocha": "^3"
   },
   "keywords": [
     "css",
