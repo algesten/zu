@@ -14,7 +14,7 @@
   "author": "Martin Algesten",
   "license": "MIT",
   "dependencies": {
-    "dom-serializer": "^0.1.0",
+    "dom-serializer-always-lt": "^0.1.0",
     "fnuc": "^3.0.6",
     "htmlparser2": "^3.9.0"
   },
