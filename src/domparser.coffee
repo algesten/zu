@@ -51,6 +51,6 @@ output = (fn, opts) -> (nodes) ->
 module.exports =
     parseXml:  (s) -> doparse s, {xmlMode:true}
     parseHtml: (s) -> doparse s
-    xml:  output serialize, xmlMode:true
-    html: output serialize
-    text: output renderText
+    xml:  output serialize, {xmlMode:true,  decodeEntities:true}
+    html: output serialize, {xmlMode:false, decodeEntities:true}
+    text: output renderText, decodeEntities:false
