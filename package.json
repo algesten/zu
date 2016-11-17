@@ -5,8 +5,12 @@
   "description": "Functional DOM grokking with CSS style selectors",
   "repository": {
     "type": "git",
-    "url": "github.com/algesten/zu"
+    "url": "github.com/algesten/zu.git"
   },
+  "bugs": {
+    "url": "https://github.com/algesten/zu/issues"
+  },
+  "homepage": "https://github.com/algesten/zu",
   "scripts": {
     "test": "mocha",
     "prepublish": "rm -rf lib && coffee -m -c -o lib src"
