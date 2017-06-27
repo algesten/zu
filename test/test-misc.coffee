@@ -7,6 +7,7 @@ html = '''
     <img class="c" src="foo2.jpg"/>
     <img           src="foo3.jpg"/>
     <img class="d" src="foo4.jpg"/>
+    <img/>
 </div>
 '''
 
@@ -22,6 +23,18 @@ describe 'attr', ->
 
     it 'accepts non arrays', ->
         assert.equal zu.attr(zu.find(ns,'img')[0],'src'), 'foo1.jpg'
+
+describe 'attrList', ->
+
+    it 'enumerates the attributes of the first node', ->
+        assert.deepEqual zu.attrList(zu.find(ns,'img')), ['src']
+
+    it 'accepts non arrays', ->
+        assert.deepEqual zu.attrList(zu.find(ns,'img')[1]), ['class', 'src']
+
+    it 'is ok with no attribs', ->
+        assert.deepEqual zu.attrList(zu.find(ns,'img')[4]), []
+
 
 describe 'hasClass', ->
 

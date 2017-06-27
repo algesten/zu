@@ -236,7 +236,7 @@ contents of each node is concatenated together.
 
 `zu.attr(nodes, name)`
 
-Return the attribute value for `names` from the first element in the
+Return the attribute value for `name` from the first element in the
 given array of nodes.
 
 `:: [n], s -> s`
@@ -245,6 +245,15 @@ Also `zu.attrWith(nodes or name)`
 
 `:: [n] -> s  -> s`  
 `:: s  -> [n] -> s`
+
+##### attrList
+
+`zu.attr(nodes, name)`
+
+Enumerates the attribute names for the first element in the
+given array of nodes.
+
+`:: [n] -> [s]`
 
 ##### hasClass
 

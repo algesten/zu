@@ -16,8 +16,11 @@ withify = do ->
 
 arg1 = require './domparser'
 
+notArray = (ns) -> if Array.isArray(ns) then ns[0] else ns
+
 arg2 = mixin {
-    attr:      (ns, name) -> (if ns instanceof Array then ns[0] else ns)?.attribs?[name]
+    attr:      (ns, name) -> notArray(ns)?.attribs?[name]
+    attrList:  (ns)       -> Object.keys(notArray(ns)?.attribs ? {})
     hasClass:  (ns, name) -> return true for n in ns when hasclass(n, name); return false
     }, require './selectors'
 
