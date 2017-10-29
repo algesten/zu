@@ -5,8 +5,10 @@ html = '''
 <div id="a" class="a b">
     <img           src="foo1.jpg"/>
     <img class="c" src="foo2.jpg"/>
-    <img           src="foo3.jpg"/>
-    <img class="d" src="foo4.jpg"/>
+    <img class="d" src="foo3.jpg"/>
+    <img-g class="d" src-bra="Bäst i test">
+        <p>foo</p>
+    </img-g>
     <img/>
 </div>
 '''
@@ -30,7 +32,7 @@ describe 'attrList', ->
         assert.deepEqual zu.attrList(zu.find(ns,'img')), ['src']
 
     it 'accepts non arrays', ->
-        assert.deepEqual zu.attrList(zu.find(ns,'img')[1]), ['class', 'src']
+        assert.deepEqual zu.attrList(zu.find(ns,'img-g')), ['class', 'src-bra']
 
     it 'is ok with no attribs', ->
         assert.deepEqual zu.attrList(zu.find(ns,'img')[4]), []
